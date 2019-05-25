@@ -40,7 +40,7 @@
           return false;
         }
 
-        
+
       }else{
         return false;
       }
@@ -107,7 +107,7 @@
           return false;
         }
       }
-    //log in 
+    //log in
     public function login($email, $password, $remember = false){
       $this->db->query('SELECT * FROM users WHERE email = :email');
       $this->db->bind('email', $email);
@@ -116,7 +116,7 @@
       //die(print_r($row, true));
 
       @$password_hash = $row->password;
-      
+
       if(password_verify($password, $password_hash)) {
 
         if($remember){
@@ -136,7 +136,7 @@
       }else{
         return false;
       }
-      
+
     }
 
     // Find User By ID
@@ -147,21 +147,21 @@
       $row = $this->db->single();
 
       return $row;
-    } 
+    }
 
     public function recover_password($email){
-      
+
         if(isset($_SESSION['token']) && $_POST['token'] === $_SESSION['token']){
           //$email = $data['email'];
           $validation_code = validation_token();
-          
+
           if($this->email_exist($email) && $this->is_activated($email)){
 
             setcookie('temp_reset_access', $validation_code, time() + 86400);
 
             $this->db->query("UPDATE users SET validation_code = '".trim($validation_code)."' WHERE email = '".trim($email)."' ");
             $this->db->execute();
-          
+
             $subject = "Password Reset Link";
             $message = "Here is your password reset code: {$validation_code}<br>
             Click here to reset your password: http://localhost/testproject/users/code?email=$email&code=$validation_code
@@ -184,7 +184,7 @@
       }
       //check if code is valid the proceed to reset password
       public function validate_code(){
-        
+
         if(isset($_COOKIE['temp_reset_access'])){
 
           if(!isset($_GET['email']) && !isset($_GET['code'])){
@@ -194,7 +194,7 @@
           }elseif (empty($_GET['email']) && empty($_GET['code'])) {
 
             redirect('pages');
-            
+
           }else {
             if(isset($_POST['code'])){
 
@@ -214,16 +214,16 @@
               }
 
             }
-            
+
           }
         }else {
           flash('error', '<span class="text-danger">Sorry your cookies has expired, please try again</span>');
           redirect('users/recover');
         }
-      
+
       }
 
-      //reset password 
+      //reset password
 
       public function reset_password($data){
 

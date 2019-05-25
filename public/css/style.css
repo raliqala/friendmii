@@ -1,0 +1,230 @@
+/*
+navbar styling
+*/
+:root {
+    --background: rgb( 0, 0, 0, 0.0);
+    --nav-around: rgb(245, 0, 100);
+}
+body {
+}
+
+header{
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    height: 3em;
+    z-index: 9999;
+}
+
+.nav-toggle {
+    display: none;
+}
+
+.nav-toggle-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 1em;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-toggle-label span,
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+    display: block;
+    background: white;
+    height: 2px;
+    width: 2em;
+    border-radius: 2px;
+    position: relative;
+}
+
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+    content: '';
+    position: absolute;
+}
+
+.nav-toggle-label span::before {
+    bottom: 7px;
+}
+
+.nav-toggle-label span::after {
+    top: 7px;
+}
+
+nav {
+    position: absolute;
+    text-align: left;
+    top: 100%;
+    left: 0;
+    background: -webkit-radial-gradient(to right, #0027FF 10%, #FF00A6 90%);
+    background: -o-radial-gradient(to right, #0027FF 10%, #FF00A6 90%);
+    background: -moz-radial-gradient(to right, #0027FF 10%, #FF00A6 90%);
+    background: linear-gradient(to right, #0027FF 10%, #FF00A6 90%);
+    width: 100%;
+    transform: scale(1, 0);
+    transform-origin: top;
+    transition: transform 400ms ease-in-out;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav li {
+    margin-left: 1em;
+    margin-bottom: 1em;
+}
+
+nav a {
+    color: white;
+    font-size: 1.5em;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 150ms ease-in-out;
+}
+
+.nav-toggle:checked ~ nav {
+    transform: scale(1, 1)
+}
+
+.nav-toggle:checked ~ nav a {
+    opacity: 1;
+    transition: opacity 250ms ease-in-out 250ms;
+}
+
+/*media query for larger screens*/
+
+@media screen and (min-width: 700px){
+    .nav-toggle-label {
+        display: none;
+    }
+
+    header {
+        display: grid;
+        grid-template-columns: 1fr auto minmax(550px, 1fr) 1fr;
+    }
+
+    header .hamberger {
+      position: absolute;
+      right: 70em;
+      margin-top: .4em;
+    }
+
+    header .hamberger a{
+      font-size: 1.5em;
+    }
+
+    header .profile {
+      position: absolute;
+      right: 64em;
+      margin-top: .3em;
+    }
+
+    header .profile a img{
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+    }
+
+    header .logo {
+      position: absolute;
+      right: 76.5em;
+      margin-top: .1em;
+    }
+
+    header .logo a img{
+      width: 110px;
+      height: 45px;
+    }
+
+    header .search-form-out {
+        position: absolute;
+        left: 61em;
+        margin-top: .58em;
+    }
+
+    header .search-form-out input[type="text"] {
+        width: 16em;
+        font-size: 1rem;
+        line-height: 1.5;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        background-color: #fff;
+        background-image: none;
+        background-clip: padding-box;
+        color: #495057;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        padding: .2rem .7rem;
+    }
+
+    header .search-form-out .button-search {
+        position: relative;
+        left: -2em;
+        background: transparent;
+        border: none;
+    }
+
+    header .three_dot_menue {
+        position: absolute;
+        left: 80em;
+        margin-top: .7em;
+    }
+
+    header .dropdown .dropdown-menu{
+      box-shadow: 0 1px 10px 5px rgb( 0, 0, 0, 0.2);;
+    }
+
+    header .three_dot_menue a img{
+      width: 45px;
+      height: 15px;
+    }
+
+    nav {
+      all: unset;
+      position: absolute;
+      margin: auto 23.8em;
+      top: -1px;
+      width: 41%;
+      display: flex;
+      background: -webkit-radial-gradient(to right, #0027FF 10%, #FF00A6 90%);
+      background: -o-radial-gradient(to right, #0027FF 10%, #FF00A6 90%);
+      background: -moz-radial-gradient(to right, #0027FF 10%, #FF00A6 90%);
+      background: linear-gradient(to right, #0027FF 10%, #FF00A6 90%);
+      border: none;
+    }
+
+    nav a {
+      opacity: 1;
+    }
+
+    nav ul {
+      display: flex;
+      position: relative;
+      top: .4em;
+      left: 4.6em;
+      margin-left: -10px;
+    }
+
+    nav li {
+      margin-left: 2em;
+      margin-top: 0;
+    }
+
+    nav ul li .right-side {
+      position: relative;
+      right: 1em;
+    }
+
+    nav ul li .left-side {
+      position: relative;
+      left: 1em;
+    }
+
+
+}

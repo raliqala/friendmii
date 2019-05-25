@@ -11,13 +11,12 @@
 
     // Load All Posts
     public function index(){
-      //$posts = $this->postModel->getPosts();
+      //$user = $this->postModel->getPosts();
 
       $data = [
-        //'posts' => $posts,
         'title' => 'Logged in'
       ];
-      
+
       $this->view('posts/index', $data);
     }
 
@@ -27,7 +26,7 @@
     //   $user = $this->userModel->getUserById($post->user_id);
 
     //   $data = [
-    //     'post' => $post, 
+    //     'post' => $post,
     //     'user' => $user
     //   ];
 
@@ -39,7 +38,7 @@
     //   if($_SERVER['REQUEST_METHOD'] == 'POST'){
     //     // Sanitize POST
     //     $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        
+
     //     $data = [
     //       'title' => trim($_POST['title']),
     //       'body' => trim($_POST['body']),
@@ -88,12 +87,12 @@
     //   if($_SERVER['REQUEST_METHOD'] == 'POST'){
     //     // Sanitize POST
     //     $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        
+
     //     $data = [
     //       'id' => $id,
     //       'title' => trim($_POST['title']),
     //       'body' => trim($_POST['body']),
-    //       'user_id' => $_SESSION['user_id'],   
+    //       'user_id' => $_SESSION['user_id'],
     //       'title_err' => '',
     //       'body_err' => ''
     //     ];

@@ -3,7 +3,7 @@
     public function __construct(){
       $this->userModel = $this->model('User');
     }
-    
+
     public function index(){
       redirect('welcome');
     }
@@ -184,7 +184,7 @@
           // Check and set logged in user
           $loggedInUser = $this->userModel->login($data['email'], $data['password'], $data['remember']);
           $activated = $this->userModel->is_activated($data['email']);
-          
+
           if ($activated) {
             if($loggedInUser){
               // User Authenticated!
@@ -195,7 +195,7 @@
               $this->view('users/login', $data);
             }
           }else {
-            
+
             echo '<script language="javascript">';
             echo 'alert("The email you privided is not activated or Does not exist")';  //not showing an alert box.
             echo '</script>';
@@ -248,7 +248,7 @@
       if($_SERVER['REQUEST_METHOD'] == 'POST'){
         // Sanitize POST
         $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        
+
         $data = [
           'email' => trim($_POST['email']),
           'email_err' => '',
@@ -260,12 +260,12 @@
           $data['email_err'] = 'Please enter an email.';
         }
 
-        
+
         // Make sure errors are empty
         if(empty($data['email_err']) ){
           $recover = $this->userModel->recover_password($data['email']);
           $activated = $this->userModel->is_activated($data['email']);
-          
+
             if($recover){
               flash('email_recov_sent', 'Password recovery code was sent to your email account.');
               redirect('pages');
@@ -276,7 +276,7 @@
               $data['email_err'] = 'This email does not exist or It was not verified.';
               $this->view('users/recover', $data);
             }
-         
+
         }else{
 
           $this->view('users/recover', $data);
@@ -340,7 +340,7 @@
            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
           // Check and set logged in user
            $passupdated = $this->userModel->reset_password($data);
-          
+
           if($passupdated){
             flash('pass_updated', 'Your password was updated you may login');
             redirect('users/login');
@@ -384,7 +384,7 @@
       if($_SERVER['REQUEST_METHOD'] == 'POST'){
         // Sanitize POST
         $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        
+
         $data = [
           'code' => trim($_POST['code']),
           'code_err' => ''
@@ -406,14 +406,14 @@
             echo '</script>';
             $this->view('users/code', $data);
           }
-          
+
         }else{
 
           $this->view('users/code', $data);
         }
 
       }else{
-      
+
         $data = [
           'code' => '',
           'code_err' => ''
@@ -427,7 +427,8 @@
     public function createUserSession($user){
       $_SESSION['user_id'] = $user->user_id;
       $_SESSION['email'] = $user->email;
-      $_SESSION['name'] = $user->lastname;
+      $_SESSION['name'] = $user->firstname;
+      $_SESSION['image'] = $user->image;
       redirect('posts');
     }
 
