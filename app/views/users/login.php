@@ -20,13 +20,13 @@
           <form action="<?php echo URLROOT; ?>/users/login" method="post">
           <div class="row align-items-center mt-2">
             <div class="col">
-            <input type="email" name="email" class="form-control" value="<?php if(isset($_COOKIE['email'])) {echo $_COOKIE['email'];} ?>" placeholder="E-mail" >
+            <input type="email" name="email" class="form-control" value="<?php if(isset($_COOKIE['friendmii_ue'])) {echo $_COOKIE['friendmii_ue'];} ?>" placeholder="E-mail" >
             </div>
           </div>
           <span class="text-danger"><?php echo $data['email_err'] ?></span>
           <div class="row align-items-center mt-2">
             <div class="col">
-            <input type="password" name="password" class="form-control" value="<?php if(isset($_COOKIE['password'])) {echo $_COOKIE['password'];} ?>" placeholder="Password">
+            <input type="password" name="password" class="form-control" value="<?php if(isset($_COOKIE['friendmii_up'])) {echo $_COOKIE['friendmii_up'];} ?>" placeholder="Password">
             </div>
           </div>
           <span class="text-danger"><?php echo $data['password_err'] ?></span>
@@ -34,7 +34,7 @@
             <div class="col">
               <div class="form-check">
                 <label class="form-check-label">
-                  <input type="checkbox" name="remember" <?php if(isset($_COOKIE['email'])){?> checked <?php } ?> value="on" class="form-check-input">
+                  <input type="checkbox" name="remember" <?php if(isset($_COOKIE['friendmii_ue'])){?> checked <?php } ?> value="on" class="form-check-input">
                   Remember me
                 </label>
                 <a href="<?php echo URLROOT; ?>/users/recover" class="pull-right">Forgot Password?</a>

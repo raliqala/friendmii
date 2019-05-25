@@ -1,10 +1,11 @@
 <?php
   class User {
     private $db;
-    private $errors = [];
+    private $util;
 
     public function __construct(){
       $this->db = new Database;
+      $this->util = new Util;
     }
 
     //register
@@ -35,6 +36,9 @@
         #$header = "From: noreply@SITENAME.com";
 
         if(verification_email($email, $subject, $message)){
+          $pass = 0;
+          $sele = 0;
+          $this->rememberToken($email, $pass, $sele);
           return true;
         }else {
           return false;
@@ -117,18 +121,41 @@
 
       @$password_hash = $row->password;
 
-      if(password_verify($password, $password_hash)) {
+      if(password_verify($password, $password_hash) || $this->validateCookie($password)) {
 
         if($remember){
-          // TODO modify in the client side
-          setcookie('email', $email, time() + 86400);
-          setcookie('password', $password, time() + 86400);
-        }else {
-          unset($_COOKIE['email']);
-          setcookie('email', '', time()-86400);
-          unset($_COOKIE['password']);
-          setcookie('password', '', time()-86400);
-        }
+
+           $random_password = $this->util->getToken(16);
+           $random_selector = $this->util->getToken(16);
+           //die(print_r($random_password, true));
+           $token_password = password_hash($random_password, PASSWORD_DEFAULT);
+           $selector = password_hash($random_selector, PASSWORD_DEFAULT);
+
+           $this->db->query('UPDATE auth SET token_password = :token_password, selector_hash = :selector_hash  WHERE email = :email');
+           $this->db->bind(':email', $email);
+           $this->db->bind(':token_password', $token_password);
+           $this->db->bind(':selector_hash', $selector);
+
+           if($this->db->execute()){
+             setcookie('friendmii_ue', $email, time() + 86400);
+             setcookie('friendmii_up', $random_password, time() + 86400);
+             setcookie('friendmii_us', $random_selector, time() + 86400);
+           }else {
+             return false;
+           }
+
+         }else {
+
+           unset($_COOKIE['friendmii_ue']);
+           setcookie('friendmii_ue', '', time()-86400);
+
+           unset($_COOKIE['friendmii_up']);
+           setcookie('friendmii_up', '', time()-86400);
+
+           unset($_COOKIE['friendmii_us']);
+           setcookie('friendmii_us', '', time()-86400);
+
+         }
 
         // TODO add logged in time here
 
@@ -257,10 +284,69 @@
         }
       }
 
-  //  public function lastlogin(){
-  //   $date = date('Y-m-d H:i:s');
+      //inserting user email to auth table with 0 0 tp and st so that we can update everytime a cookie is set
+    public function rememberToken($email, $token_pass, $selector_token){
+      $this->db->query('INSERT INTO auth (email, token_password, selector_hash) VALUES(:email, :token_password, :selector_hash)');
+      $this->db->bind(':email', $email);
+      $this->db->bind(':token_password', $token_pass);
+      $this->db->bind(':selector_hash', $selector_token);
 
-  //  }
+      if($this->db->execute()){
+        return true;
+      }else {
+        return false;
+      }
+
+    }
+
+    //this function is currently not inuse..
+  public function getTokendByEmail($email)
+  {
+    $this->db->query('SELECT * FROM auth WHERE email = :email');
+    $this->db->bind(':email', $email);
+    $row = $this->db->single();
+
+    if ($this->db->rowCount($row) > 0) {
+      return true;
+    }else {
+      return false;
+    }
+
+  }
+
+  //this function validate the cookies and the password input..
+  public function validateCookie($password = null){
+
+      if(isset($_COOKIE["friendmii_ue"]) && isset($_COOKIE["friendmii_up"]) && isset($_COOKIE["friendmii_us"])){
+        $member = (isset($_COOKIE['friendmii_ue'])) ? $_COOKIE['friendmii_ue'] : '';
+
+        $this->db->query('SELECT * FROM auth WHERE email = :email');
+        $this->db->bind(':email', $member);
+        $userToken = $this->db->single();
+
+        @$pass = $userToken->token_password;
+        @$selector_hash = $userToken->selector_hash;
+        $unputpass =  $password;
+
+        $token_pass = (isset($_COOKIE['friendmii_up'])) ? $_COOKIE['friendmii_up'] : '';
+        $token_select = (isset($_COOKIE['friendmii_us'])) ? $_COOKIE['friendmii_us'] : '';
+        //die(print_r(password_verify($password, $pass), true));
+
+
+        if (password_verify($token_pass, $pass) && password_verify($selector_hash, $token_select) || password_verify($pass, $token_pass) && password_verify($token_select, $selector_hash) || password_verify($pass, $token_pass) && password_verify($selector_hash, $token_select) || password_verify($token_pass, $pass) && password_verify($token_select, $selector_hash)) {
+          if(password_verify($unputpass, $pass) || password_verify($pass, $unputpass)){
+            return true;
+          }else{
+            $this->util->clearAuthCookie();
+          }
+        }else {
+          $this->util->clearAuthCookie();
+        }
+      }
+
+   }
+
+
 
 
   }

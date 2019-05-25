@@ -44,12 +44,13 @@
       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
           <a class="dropdown-item" href="#">Signed in as <strong><?php echo $_SESSION['name'];?></strong></a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Action</a>
           <a class="dropdown-item" href="#">Change theme</a>
+          <a class="dropdown-item" href="#">Terms</a>
+          <a class="dropdown-item" href="#">Privacy policy</a>
+          <a class="dropdown-item" href="#">Report a problem</a>
           <a class="dropdown-item" href="#">Setting</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item text-center" href="<?php echo URLROOT; ?>/users/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> SIGN OUT</a>
+          <a class="dropdown-item text-center" href="<?php echo URLROOT; ?>/users/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Signout</a>
       </div>
     </div>
 </header>
