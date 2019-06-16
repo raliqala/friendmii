@@ -10,6 +10,7 @@
   require_once 'helpers/token_helper.php';
   require_once 'helpers/email_helper.php';
   require_once 'helpers/time_helper.php';
+  require_once 'helpers/avatar_creater_helper.php';
   //require_once 'PHPMailer/PHPMailerAutoload.php';
 
   // Autoload Core Classes

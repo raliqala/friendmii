@@ -10,21 +10,21 @@
           </div>
           <div class="row">
             <div class="col text-center">
-              <h1>RECOVER YOUR PASSWORD</h1>
-              <p class="text-h3">Far far away, far from the countries Vokalia and Consonantia. </p>
+              <h1 class="h3">Reset password</h1>
+              <p class="text-h3">Enter your email to reset your password</p>
             </div>
           </div>
           <form action="<?php echo URLROOT; ?>/users/recover" method="post">
           <div class="row align-items-center mt-2">
             <div class="col">
-            <input type="email" name="email" class="form-control" value="<?php echo $data['email']; ?>" placeholder="E-mail" >
+            <input type="email" name="email" class="form-control" value="<?php echo $data['email']; ?>" placeholder="Enter your email" >
             <input type="hidden" class="hide" name="token" value="<?php echo validation_token(); ?>">
             </div>
           </div>
           <span class="text-danger"><?php echo $data['email_err'] ?></span>
           <div class="row justify-content-start mt-3">
             <div class="col">
-              <button type="submit" class="btn btn-primary btn-block mt-3" >Send password reset code</button>
+              <button type="submit" class="btn btn-primary btn-block mt-1" >Reset password</button>
             </div>
           </div>
           <p class="text-center mt-2"><a class="text-danger" href="<?php echo URLROOT; ?>/users/login">Cancel</a></p>
@@ -34,5 +34,5 @@
     </div>
   </section>
 
-  
+
 <?php require APPROOT . '/views/inc/footer.php'; ?>

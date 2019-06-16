@@ -425,19 +425,16 @@
     }
     // Create Session With User Info
     public function createUserSession($user){
+      $img = $this->userModel->getProfile();
       $_SESSION['user_id'] = $user->user_id;
       $_SESSION['email'] = $user->email;
       $_SESSION['name'] = $user->firstname;
-      $_SESSION['image'] = $user->image;
+      $_SESSION['profile_pic'] = $user->image;
       redirect('posts');
     }
 
     // Logout & Destroy Session
     public function logout(){
-      // if(isset($_COOKIE['email'])){
-      //   unset($_COOKIE['email']);
-      //   setcookie('email', '', time()-86400);
-      // }
       unset($_SESSION['user_id']);
       unset($_SESSION['email']);
       unset($_SESSION['name']);

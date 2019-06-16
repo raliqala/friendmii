@@ -1,0 +1,60 @@
+.outer-positioning {
+  position: relative;
+  right: 4em;
+}
+
+.outer-positioning .form-control-custom {
+  height: 3em;
+  font-size: 18px;
+  width: 30em !important;
+  color: #6e6e6e;
+  border: 1px solid #b3b3b3;
+  border-radius: 20px;
+  background-color: #fff;
+  padding-left: 3.5em;
+}
+
+.post-only .modal textarea {
+  padding-left: 3.1em;
+}
+
+.outer-positioning input:hover {
+  cursor: pointer;
+}
+
+.outer-positioning .post-profile {
+  position: relative;
+  bottom: -.8em;
+  right: -3.8em;
+  z-index: 1000;
+}
+
+.modal .post-post {
+  position: absolute;
+  top: 1.8em;
+  right: 34.6em;
+  z-index: 1000;
+}
+
+.outer-positioning .post-camera {
+  position: relative;
+  left: -3.5em;
+  top: .8em;
+  z-index: 1000;
+}
+
+.outer-positioning .post-camera a {
+  color: #cecece;
+  font-size: 1.5em;
+}
+
+.outer-positioning .post-profile a img {
+  background-size: 40px 40px;
+  border-radius: 100px;
+}
+
+.outer-positioning .post-post a img {
+  background-size: 40px 40px;
+  border-radius: 100px;
+}
+/*# sourceMappingURL=post.css.map */

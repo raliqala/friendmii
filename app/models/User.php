@@ -14,8 +14,11 @@
       $date = date('Y-m-d H:i:s');
       //$validation_code = md5($data['name'] + microtime());
       $email = $data['email'];
+      $firstname = $data['firstname'];
+      //$nameFirstChar = $firstname[0];
+      //$target_path = createAvatarImage($nameFirstChar);
 
-      $this->db->query('INSERT INTO users(firstname, lastname, email, dob, gender, address, validation_code, password, is_activated, acount_created_at) VALUES (:firstname, :lastname, :email, :dob, :gender, :address, :validation_code, :password, 0, :acount_created_at)');
+      $this->db->query('INSERT INTO users(firstname, lastname, email, dob, gender, address, validation_code, password, is_activated, acount_created_at, deleted) VALUES (:firstname, :lastname, :email, :dob, :gender, :address, :validation_code, :password, 0, :acount_created_at, 0)');
       $this->db->bind(':firstname', $data['firstname']);
       $this->db->bind(':lastname', $data['lastname']);
       $this->db->bind(':email', $data['email']);
@@ -25,7 +28,7 @@
       $this->db->bind(':validation_code', $validation_code);
       $this->db->bind(':password', $data['password']);
       $this->db->bind(':acount_created_at', $date);
-      //$this->db->bind(':password', $active);
+      //$this->db->bind(':image', $target_path);
 
       if($this->db->execute()){
 
@@ -113,6 +116,7 @@
       }
     //log in
     public function login($email, $password, $remember = false){
+      $date = date('Y-m-d H:i:s');
       $this->db->query('SELECT * FROM users WHERE email = :email');
       $this->db->bind('email', $email);
 
@@ -145,7 +149,7 @@
            }
 
          }else {
-
+           // TODO delete the temp-pass-token, temp-selector-pass
            unset($_COOKIE['friendmii_ue']);
            setcookie('friendmii_ue', '', time()-86400);
 
@@ -157,7 +161,17 @@
 
          }
 
-        // TODO add logged in time here
+        // TODO updated login time
+        try {
+          $this->db->query('UPDATE users SET last_active = :last_active WHERE email = :email');
+          $this->db->bind(':email', $email);
+          $this->db->bind(':last_active', $date);
+          $this->db->execute();
+
+        } catch (Exception $e) {
+          echo 'Sorry something went wrong: ' .$e->getMessage();
+        }
+
 
         return $row;
       }else{
@@ -346,7 +360,113 @@
 
    }
 
+   //profile functions
+   public function getProfile(){
+     $id = $_SESSION['user_id'];
+     $this->db->query('SELECT user_id, firstname, lastname, email, dob, gender, address, cellno, hobby, cover_image, image AS profile_pic, video_descryption, acount_created_at AS joined_date, last_active, job_name, job_title, bio, music, movies, books, animals FROM users WHERE user_id = :user_id');
+     $this->db->bind(':user_id', $id);
+     $results = $this->db->resultset();
+     if ($this->db->rowCount($results) > 0) {
 
+       return $results;
+     }else {
+       return false;
+     }
+   }
+
+   // //update Profile
+   public function updateProfile($data){
+     $id = $_SESSION['user_id'];
+     $name = $data['firstname'];
+     //die(print_r($id,true));
+     $this->db->query('UPDATE users SET firstname = :firstname, lastname = :lastname, email = :email, address = :address, gender = :gender, hobby = :hobby  WHERE user_id = :user_id');
+     $this->db->bind(':user_id', $id);
+     $this->db->bind(':firstname', $data['firstname']);
+     $this->db->bind(':lastname', $data['lastname']);
+     $this->db->bind(':email', $data['email']);
+     $this->db->bind(':gender', $data['gender']);
+     $this->db->bind(':address', $data['address']);
+     $this->db->bind(':hobby', $data['hobby']);
+
+
+     if ($this->db->execute()) {
+       $_SESSION['name'] = $name;
+       return true;
+     }else {
+       return false;
+     }
+
+   }
+
+   // //update Profile favourites
+   public function updateFavourite($data){
+     $id = $_SESSION['user_id'];
+     //die(print_r($id,true));
+     $this->db->query('UPDATE users SET music = :music, movies = :movies, books = :books, animals = :animals   WHERE user_id = :user_id');
+     $this->db->bind(':user_id', $id);
+     $this->db->bind(':music', $data['music']);
+     $this->db->bind(':movies', $data['movies']);
+     $this->db->bind(':books', $data['books']);
+     $this->db->bind(':animals', $data['animals']);
+
+     if ($this->db->execute()) {
+       return true;
+     }else {
+       return false;
+     }
+
+   }
+
+   // //update Profile pictute
+   public function updatePro_picture($data){
+      $id = $_SESSION['user_id'];
+      $_SESSION['profile_pic'] = $data['image'];
+      //die(print_r($data,true));
+      $this->db->query('UPDATE users SET image = :image WHERE user_id = :user_id');
+      $this->db->bind(':user_id', $id);
+      $this->db->bind(':image', $data['image']);
+
+      if($this->db->execute()) {
+        return true;
+      }else {
+        return false;
+      }
+
+   }
+
+   // //update Profile cover
+   public function updatePro_cover($data){
+      $id = $_SESSION['user_id'];
+      //die(print_r($data,true));
+      $this->db->query('UPDATE users SET cover_image = :cover_image WHERE user_id = :user_id');
+      $this->db->bind(':user_id', $id);
+      $this->db->bind(':cover_image', $data['image']);
+
+      if($this->db->execute()) {
+        return true;
+      }else {
+        return false;
+      }
+
+   }
+
+   // //update bio
+   public function updateBio($data){
+      $id = $_SESSION['user_id'];
+      //die(print_r($data,true));
+      $this->db->query('UPDATE users SET job_name = :job_name, job_title = :job_title, bio = :bio WHERE user_id = :user_id');
+      $this->db->bind(':user_id', $id);
+      $this->db->bind(':job_name', $data['job']);
+      $this->db->bind(':job_title', $data['position']);
+      $this->db->bind(':bio', $data['bio']);
+
+      if($this->db->execute()) {
+        return true;
+      }else {
+        return false;
+      }
+
+   }
 
 
   }

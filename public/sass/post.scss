@@ -1,0 +1,62 @@
+.outer-positioning{
+  position: relative;
+  right: 4em;
+}
+.outer-positioning .form-control-custom{
+  height: 3em;
+  font-size: 18px;
+  width: 30em !importan;
+  color: rgb(110, 110, 110);
+  border: .2px solid rgb(179, 179, 179);
+  border-radius: 20px;
+  background-color: #fff;
+  padding-left: 3.5em;
+}
+
+.modal textarea{
+  padding-left: 3.5em;
+}
+
+.outer-positioning input:hover{
+   cursor: pointer;
+}
+
+.outer-positioning .post-profile{
+  position: relative;
+  bottom: -.8em;
+  right: -3.8em;
+  z-index: 1000;
+}
+
+.modal .post-post{
+  position: absolute;
+  top: 1.8em;
+  right: 37.9em;
+  z-index: 1000;
+}
+
+
+.outer-positioning .post-camera{
+  position: relative;
+  left: -3.5em;
+  top: .8em;
+  z-index: 1000;
+}
+
+.outer-positioning .post-camera a{
+  color: rgb(206, 206, 206);
+  font-size: 1.5em;
+}
+
+.outer-positioning .post-profile a img{
+  background-size: 40px 40px;
+  -moz-border-radius: 10%;
+  border-radius: 100px;
+}
+
+.outer-positioning .post-post a img{
+  background-size: 40px 40px;
+  -moz-border-radius: 10%;
+  border-radius: 100px;
+}
+

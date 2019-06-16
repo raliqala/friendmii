@@ -5,7 +5,7 @@
         redirect('users/login');
       }
       // Load Models
-      //$this->postModel = $this->model('Post');
+      $this->postModel = $this->model('Post');
       //$this->userModel = $this->model('User');
     }
 
@@ -33,54 +33,105 @@
     //   $this->view('posts/show', $data);
     // }
 
-    // // Add Post
-    // public function add(){
-    //   if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    //     // Sanitize POST
-    //     $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+      // Add Post
+      public function post(){
+        if(!$_SESSION['user_id']){
+          redirect('users/login');
+        }
+        $uname = $_SESSION['name'];
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            //Sanitize post array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-    //     $data = [
-    //       'title' => trim($_POST['title']),
-    //       'body' => trim($_POST['body']),
-    //       'user_id' => $_SESSION['user_id'],
-    //       'title_err' => '',
-    //       'body_err' => ''
-    //     ];
+            $folder ="assets/posts/";
 
-    //      // Validate email
-    //      if(empty($data['title'])){
-    //       $data['title_err'] = 'Please enter name';
-    //       // Validate name
-    //       if(empty($data['body'])){
-    //         $data['body_err'] = 'Please enter the post body';
-    //       }
-    //     }
+            $image = $_FILES['image']['name'];
 
-    //     // Make sure there are no errors
-    //     if(empty($data['title_err']) && empty($data['body_err'])){
-    //       // Validation passed
-    //       //Execute
-    //       if($this->postModel->addPost($data)){
-    //         // Redirect to login
-    //         flash('post_added', 'Post Added');
-    //         redirect('posts');
-    //       } else {
-    //         die('Something went wrong');
-    //       }
-    //     } else {
-    //       // Load view with errors
-    //       $this->view('posts/add', $data);
-    //     }
+            $path = $folder . $uname . $image ;
 
-    //   } else {
-    //     $data = [
-    //       'title' => '',
-    //       'body' => '',
-    //     ];
+            $data = [
+                'post_text' => trim($_POST['post_text']),
+                'user_id' => trim($_SESSION['user_id']),
+                'image' => trim($path)
+            ];
+            //die(print_r(isset($data['post_text']), true));
+            //die(print_r("nooo", true));
+            $target_file=$folder.basename($_FILES["image"]["name"]);
 
-    //     $this->view('posts/add', $data);
-    //   }
-    // }
+
+            $imageFileType=pathinfo($target_file,PATHINFO_EXTENSION);
+
+            $file_size =$_FILES['image']['size'];
+            //die(print_r($file_size,true));
+            $allowed=array('jpeg','png' ,'jpg', 'gif');
+
+            $filename=$_FILES['image']['name'];
+
+            $ext=pathinfo($filename, PATHINFO_EXTENSION);
+            //die(print_r(empty($data['image']), true));
+            if (empty($data['post_text']) && empty($filename)) {
+              flash('error-post', '');
+              redirect('posts');
+            }
+
+              //die(print_r(isset($filename) && !empty($filename) && !empty($data['post_text']) && !empty($data['image']),true));
+              if (isset($filename) && !empty($filename) && !empty($data['post_text']) && !empty($data['image'])) {
+                if (in_array($ext,$allowed) && $file_size < 2097152 && $file_size != 0) {
+                  if(move_uploaded_file($_FILES['image']['tmp_name'], $path)) {
+                    if($this->postModel->addPost($data)) {
+                      redirect('posts');
+                      exit();
+                    }else {
+                      flash('error-post', '<span class="text-danger">Sorry something went wrong.</span>');
+                      redirect('posts');
+                    }
+                  }
+                }
+                else{
+                  flash('error-post', '<span class="text-danger">Sorry only JPG, JPEG, PNG & GIF  files are allowed AND file size must be less than or equals 2mb.</span>');
+                  redirect('posts');
+                }
+
+              }
+
+
+              if (isset($data['post_text']) && !empty($data['post_text'])) {
+                if($this->postModel->addPost($data)) {
+                  redirect('posts');
+                  exit();
+                }else {
+                  flash('error-post', '<span class="text-danger">Sorry something went wrong.</span>');
+                  redirect('posts');
+                }
+              }
+
+
+              //die(print_r(isset($filename) && !empty($filename) && !empty($data['image']), true));
+              if (isset($filename) && !empty($filename) && !empty($data['image'])) {
+                if (in_array($ext,$allowed) && $file_size < 2097152 && $file_size != 0) {
+                  if(move_uploaded_file( $_FILES['image']['tmp_name'], $path)) {
+                    if($this->postModel->addPost($data)) {
+                      redirect('posts');
+                      exit();
+                    }else {
+                      flash('error-post', '<span class="text-danger">Sorry something went wrong.</span>');
+                      redirect('posts');
+                    }
+                  }
+                }else{
+                  flash('error-post', '<span class="text-danger">Sorry, only JPG, JPEG, PNG & GIF  files are allowed AND file size must be less than or equals 2mb.</span>');
+                  redirect('posts');
+                }
+              }
+
+
+        }else{
+            //get existing post from model
+
+            $this->view('posts', $data);
+          }
+
+       }
 
     // // Edit Post
     // public function edit($id){

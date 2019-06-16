@@ -13,7 +13,7 @@ function validation_token(){
 }
 
 function validation_errors($error_message){
-  
+
   $error_message = <<<DELIMITER
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
           <strong>Warning!</strong> $error_message.
@@ -22,15 +22,27 @@ function validation_errors($error_message){
         </button>
   </div>
 DELIMITER;
-  
+
   return $error_message;
 }
 
-// function is_valid_password($password) {
-//   return preg_match_all('/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z])(?=S*[a-z]).{6,}$/', $password);
-// }
-// if (!empty($errors)) {
-//   foreach ($errors as $error) {
-//     echo validation_errors($error);
-//   }
+
+// function sessionX(){
+//     $logLength = 1800; # time in seconds :: 1800 = 30 minutes
+//     $ctime = strtotime("now"); # Create a time from a string
+//     # If no session time is created, create one
+//     if(!isset($_SESSION['sessionX'])){
+//         # create session time
+//         $_SESSION['sessionX'] = $ctime;
+//     }else{
+//         # Check if they have exceded the time limit of inactivity
+//         if(((strtotime("now") - $_SESSION['sessionX']) > $logLength) && $user->isLoggedIn()){
+//             # If exceded the time, log the user out
+//             $user->logout();
+//             exit;
+//         }else{
+//             # If they have not exceded the time limit of inactivity, keep them logged in
+//             $_SESSION['sessionX'] = $ctime;
+//         }
+//     }
 // }

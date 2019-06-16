@@ -5,7 +5,8 @@
   define("DB_PASS", "84226Tp$%45ASdf");
   define("DB_NAME", "friendmii");
   define("EMAIL","lucyfa45@gmail.com");
-  define("PASS","84226Tp45");
+  define("PASS", "84226Tp45");
+  define("MENU_ICON", "./public/assets/");
 
   // App Root
   define('APPROOT', dirname(dirname(__FILE__)));

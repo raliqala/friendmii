@@ -1,7 +1,7 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
 
-<section style="padding-top: 5em; ">
+<section style="padding-top: 2em; ">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-md-8 col-lg-8 col-xl-5 ml-auto">
@@ -20,13 +20,13 @@
           <form action="<?php echo URLROOT; ?>/users/login" method="post">
           <div class="row align-items-center mt-2">
             <div class="col">
-            <input type="email" name="email" class="form-control" value="<?php if(isset($_COOKIE['friendmii_ue'])) {echo $_COOKIE['friendmii_ue'];} ?>" placeholder="E-mail" >
+            <input type="email" name="email" class="form-control" id="email" value="<?php if(isset($_COOKIE['friendmii_ue'])) {echo $_COOKIE['friendmii_ue'];} ?>" placeholder="E-mail" >
             </div>
           </div>
           <span class="text-danger"><?php echo $data['email_err'] ?></span>
           <div class="row align-items-center mt-2">
             <div class="col">
-            <input type="password" name="password" class="form-control" value="<?php if(isset($_COOKIE['friendmii_up'])) {echo $_COOKIE['friendmii_up'];} ?>" placeholder="Password">
+            <input type="password" name="password" class="form-control" id="password" value="<?php if(isset($_COOKIE['friendmii_up'])) {echo $_COOKIE['friendmii_up'];} ?>" placeholder="Password">
             </div>
           </div>
           <span class="text-danger"><?php echo $data['password_err'] ?></span>
@@ -39,7 +39,7 @@
                 </label>
                 <a href="<?php echo URLROOT; ?>/users/recover" class="pull-right">Forgot Password?</a>
               </div>
-              <button type="submit" class="btn btn-primary btn-block mt-3" >SIGNIN</button>
+              <button type="submit" id="submit-control" class="btn btn-primary btn-block mt-3" data-disable-with="Signing in...">SIGNIN</button>
             </div>
           </div>
           <p class="text-center mt-2">Don't have an Account? <a href="<?php echo URLROOT; ?>/users/register">SIGN UP</a></p>
