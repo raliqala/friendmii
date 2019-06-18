@@ -7,7 +7,7 @@
   <div class="container">
     <?php foreach($data['profile'] as $pro) : ?>
 
-    <div class="row">
+    <div class="row mt-4">
       <div class="col-md-12">
         <h3 class="h5"><?php flash('profile_updated'); ?></h3>
         <h3 class="h5"><?php flash('error-profile'); ?></h3>

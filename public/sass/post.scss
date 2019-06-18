@@ -1,11 +1,13 @@
+$feed-default-color: white;
+
 .outer-positioning{
   position: relative;
-  right: 4em;
+  right: 3em !important;
 }
 .outer-positioning .form-control-custom{
   height: 3em;
   font-size: 18px;
-  width: 30em !importan;
+  width: 32em !important;
   color: rgb(110, 110, 110);
   border: .2px solid rgb(179, 179, 179);
   border-radius: 20px;
@@ -31,7 +33,7 @@
 .modal .post-post{
   position: absolute;
   top: 1.8em;
-  right: 37.9em;
+  right: 34.6em;
   z-index: 1000;
 }
 
@@ -52,11 +54,45 @@
   background-size: 40px 40px;
   -moz-border-radius: 10%;
   border-radius: 100px;
+  object-fit: cover;
 }
 
 .outer-positioning .post-post a img{
   background-size: 40px 40px;
   -moz-border-radius: 10%;
   border-radius: 100px;
+  object-fit: cover;
 }
 
+/*post view design*/
+.feed-data-controller{
+  position: relative;
+  width: 53%;
+  top: 1em;
+  left: 13.77em;
+}
+
+.feed-data-controller .feed-data{
+  width: 100%;
+  height: auto;
+  background-color: $feed-default-color;
+  -moz-border-radius: 2%;
+  -webkit-border-radius: 2%;
+  border-radius: 4px;
+  box-shadow: 0 1px 15px 1px rgba(52,40,104,.1);
+  padding: 20px;
+}
+
+.feed-data .feed-data-image-user{
+  position: relative;
+  top: -.8em;
+  left: -.7em;
+  z-index: 1000;
+}
+
+.feed-data .feed-data-image-user a img{
+  background-size: 40px 40px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  object-fit: cover;
+}

@@ -48,7 +48,7 @@ navigation: c4 blue-gradient
 }
 
 body{
-  padding-top: 100px;
+  padding-top: 60px;
 }
 
 /* .container .row .jumbo-style{
@@ -92,6 +92,8 @@ nav .nav-item a img{
   border-radius: 10%;
   height: 35px;
   width: 35px;
+  -o-object-fit: cover;
+  object-fit: cover;
 }
 
 /***profile***/

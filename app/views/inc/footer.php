@@ -1,4 +1,7 @@
 </div>
+<script src="<?php echo URLROOT; ?>/js/bootbox.js"></script>
+<script src="<?php echo URLROOT; ?>/js/bootbox.min.js" charset="utf-8"></script>
+<script src="<?php echo URLROOT; ?>/js/bootbox.locales.min.js"></script>
 <script src="<?php echo URLROOT; ?>/emoji/js/config.js"></script>
 <script src="<?php echo URLROOT; ?>/emoji/js/util.js"></script>
 <script src="<?php echo URLROOT; ?>/emoji/js/jquery.emojiarea.js"></script>

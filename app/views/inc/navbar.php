@@ -125,8 +125,8 @@
      <!-- Links -->
 
 
-       <form class="form-inline my-2 my-lg-0 ml-4">
-         <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+       <form class="form-inline my-2 my-lg-0 ml-4" action="<?php echo URLROOT; ?>/posts/search" method="post">
+         <input class="form-control" name="search" type="search" placeholder="Search" aria-label="Search">
          <button class="mr-4" style="background: transparent; border: none; margin-left: -2em;" type="submit"> <i class="fa fa-search"></i> </button>
        </form>
    </div>

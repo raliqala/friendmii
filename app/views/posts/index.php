@@ -2,7 +2,9 @@
 
   <div class="container">
     <div class="row">
-      <h3 class="h5"><?php flash('error-post'); ?></h3>
+      <div class="" role="alert" style="position: relative; bottom: -2em; right: -7em; font-size: 1em;">
+        <?php flash('error-post'); ?>
+      </div>
     </div>
     <!-- <div class="row pull-left ml-auto">
       <div class="card" style="width: 18rem;">
@@ -75,7 +77,7 @@
                                   <div class="d-flex justify-content-left">
                                     <div class="">
                                       <span class="blue-text"><i class="fa fa-picture-o fa-lg"></i></span>
-                                      <input type="file" id="file" name="image" accept=".jpg, .png, .gif, .jpeg">
+                                      <input type="file" id="file" name="image" accept=".jpg, .png, .gif, .jpeg" onkeyup="imageVal()">
                                     </div>
                                   </div>
                                 </div>
@@ -98,8 +100,69 @@
             </div>
           </div>
         </section>
+
+        <div class="mt-4">
+        </div>
+
+        <?php foreach($data['posts'] as $post) :?>
+          <section>
+            <div class="container">
+              <div class="row justify-content-center mr-4">
+                <div class="col-12 col-md-8 col-lg-8 col-xl-8">
+                  <div class="card card-body mb-3">
+                      <h4 class="card-title"></h4>
+                      <div class="mb-3 image-user" style="margin-top: -1em;">
+                        <a href="<?php echo URLROOT; ?>/profile">
+                          <?php if (!empty($post->profile_pic)): ?>
+                            <img src="<?php echo $post->profile_pic; ?>" width="40" height="40" alt="profile pic">
+                          <?php else: ?>
+                            <img src="./public/assets/blank-profile.png" width="40" height="40" alt="profile pic">
+                          <?php endif; ?>
+                        </a>
+                        <a href="" class="name-time-position"><?php echo $post->firstname; ?></a><br>
+                        <a href="" class="time-position"><?php echo get_time_ago($post->posted_at); ?></a>
+
+                        <a href="#" class="a-move pull-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-h fa-lg"></i></a>
+                        <div class="dropdown-menu">
+                          <?php if ($_SESSION['user_id'] != $post->user_id): ?>
+                            <a class="dropdown-item" href="#"><i class="fa fa-bug"></i> Report post</a>
+                          <?php else: ?>
+                            <a class="dropdown-item" href="<?php echo URLROOT; ?>/posts/edit/<?php echo $post->post_id;?>"><i class="fa fa-pencil"></i> Edit post</a>
+                            <a class="dropdown-item" href="<?php echo URLROOT; ?>/posts/delete/<?php echo $post->post_id;?>"><i class="fa fa-trash"></i> Delete post</a>
+                          <?php endif; ?>
+
+                        </div>
+                        <!-- Basic dropdown -->
+                        <span class="pull-right">
+                          <a href="" class="mr-4">
+                            <i class="fa fa-bookmark fa-lg" aria-hidden="true"></i>
+                          </a>
+                          <a href="#">
+                            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+                          </a>
+                        </span>
+                      </div>
+                      <p class="card-text">
+                          <?php echo $post->post; ?>
+                      </p>
+                      <div class="feed-body">
+                       <?php if (!empty($post->post_image && $post->post_image != "assets/posts/")): ?>
+                         <div class="post-image-style">
+                           <img src="<?php echo $post->post_image; ?>" width="623" height="300" alt="post image">
+                         </div>
+                       <?php endif; ?>
+                     </div>
+
+                  </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <?php endforeach; ?>
+
     </div>
     <script type="text/javascript">
+
 
           function TpValidate(){
             var fileInput = document.getElementById('file');
@@ -115,20 +178,23 @@
                 post.value = '';
                 return false;
             }
-            var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-             if(!allowedExtensions.exec(image)){
-                 alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
-                 fileInput.value = '';
-                 return false;
-             }
-            var fileSize = document.getElementById('file').files[0].size;
-            if(fileSize > 2097152){
-               alert("Maximum file size exceeded, file size must be less than or equals 2mb");
-               fileInput.value = '';
-               return false;
-            };
 
             return true;
+        }
+
+        function imageVal(){
+          var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+           if(!allowedExtensions.exec(image)){
+               alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+               fileInput.value = '';
+               return false;
+           }
+          var fileSize = document.getElementById('file').files[0].size;
+          if(fileSize > 2097152){
+             alert("Maximum file size exceeded, file size must be less than or equals 2mb");
+             fileInput.value = '';
+             return false;
+          };
         }
 
     </script>
