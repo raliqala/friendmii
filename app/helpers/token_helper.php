@@ -1,6 +1,6 @@
 <?php
 
-$errors = [];
+require_once 'C:\xampp\htdocs\testproject\app\libraries\Database.php';
 
 function token_generator(){
   $code = md5(uniqid(mt_rand(), true));
@@ -12,18 +12,19 @@ function validation_token(){
   return $token;
 }
 
-function validation_errors($error_message){
+function UserLikedOrNot($uid,$pid){
+  $db = new Database(true);
 
-  $error_message = <<<DELIMITER
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          <strong>Warning!</strong> $error_message.
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-             <span aria-hidden="true">&times;</span>
-        </button>
-  </div>
-DELIMITER;
+  $db->query('SELECT * FROM post_like WHERE user_id = :user_id AND post_id = :post_id');
+  $db->bind(':user_id', $uid);
+  $db->bind(':post_id', $pid);
+  $row = $db->single();
+  if ($db->rowCount($row) > 0) {
+    return $row;
+  }else {
+    return false;
+  }
 
-  return $error_message;
 }
 
 

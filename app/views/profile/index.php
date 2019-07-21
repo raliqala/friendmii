@@ -1,11 +1,12 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
+
   <style media="screen">
   .pac-container {
       z-index: 1051 !important;
   }
   </style>
   <div class="container">
-    <?php foreach($data['profile'] as $pro) : ?>
+    <?php foreach($data['profileData'] as $pro) : ?>
 
     <div class="row mt-4">
       <div class="col-md-12">
@@ -13,7 +14,11 @@
         <h3 class="h5"><?php flash('error-profile'); ?></h3>
         <div class="jumbotron jumbotron-fluid jumbo-style" style="height: 13em;background-image:url('<?php if(isset($pro->cover_image)) {echo $pro->cover_image;} ?>'); background-size: cover; background-repeat: no-repeat; background-position: center; background-attachment: static;">
           <div class="container">
-              <a href="#" class="d-flex justify-content-start"><i class="fa fa-camera" aria-hidden="true" data-toggle="modal" data-target="#modalSubscriptionForm1"></i></a>
+              <?php if ($_SESSION['user_id'] != $pro->user_id): ?>
+
+              <?php else: ?>
+                <a href="javascript:void(0)" class="d-flex justify-content-start"><i class="fa fa-camera" aria-hidden="true" data-toggle="modal" data-target="#modalSubscriptionForm1"></i></a>
+              <?php endif; ?>
           </div>
         </div>
         <div class="modal fade" id="modalSubscriptionForm1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -53,12 +58,17 @@
         </div>
       </div>
       <div class="profile-image">
-          <a href="#" class="d-flex justify-content-center camera-hover">
-            <i class="fa fa-camera" aria-hidden="true" data-toggle="modal" data-target="#modalSubscriptionForm"></i>
-          </a>
+          <?php if ($_SESSION['user_id'] != $pro->user_id): ?>
+
+          <?php else: ?>
+            <a href="javascript:void(0)" class="d-flex justify-content-center camera-hover">
+              <i class="fa fa-camera" aria-hidden="true" data-toggle="modal" data-target="#modalSubscriptionForm"></i>
+            </a>
+          <?php endif; ?>
+
         <div class="inner-image">
-          <?php if (!empty($pro->profile_pic)): ?>
-            <img src='<?php echo $pro->profile_pic; ?>' class="rounded" alt='profile'>
+          <?php if (!empty($pro->image)): ?>
+            <img src='<?php echo $pro->image; ?>' class="rounded" alt='profile'>
           <?php else: ?>
             <img src="./public/assets/blank-profile.png" class="rounded" alt='profile'>
           <?php endif; ?>
@@ -100,7 +110,7 @@
         </div>
       </div>
       <div class="perso-data">
-        <h2 class="h3"><?php echo $pro->firstname; ?> <span></span> <?php echo $pro->lastname; ?> <span class="text-success h6">Joined: <?php echo get_time_ago($pro->joined_date); ?></span></h2>
+        <h2 class="h5"><?php echo $pro->firstname; ?> <span></span> <?php echo $pro->lastname; ?> <span class="text-success h6">Joined: <?php echo get_time_ago($pro->acount_created_at); ?></span></h2>
           <span><strong class="h5">Gender:</strong> <?php echo $pro->gender; ?></span>
           <span><strong class="h5 ml-2">Born:</strong> <?php echo $pro->dob; ?></span>
       </div>
@@ -109,7 +119,13 @@
         <div class="stats">
         	<div>
             	<strong>Posts</strong>
-                0
+                <?php foreach ($data['PostCount'] as $counter): ?>
+                  <?php if ($counter->Total_Posts == 0): ?>
+                    0
+                  <?php else: ?>
+                    <?php echo $counter->Total_Posts; ?>
+                  <?php endif; ?>
+                <?php endforeach; ?>
             </div>
             <div>
             	<strong>Likes</strong>
@@ -135,7 +151,12 @@
             <!--write contact info.. email phone address-->
             <div class="contact-card-customize">
               <h1 class="h4">Contact information and Hobbies</h1>
-              <span class="edit-contact pull-right"><a href="" data-toggle="modal" data-target="#exampleModal2" data-whatever="@mdo"><i class="fa fa-pencil-square fa-2x"></i></a></span>
+              <?php if ($_SESSION['user_id'] != $pro->user_id): ?>
+
+              <?php else: ?>
+                <span class="edit-contact pull-right"><a href="javascript:void(0)" data-toggle="modal" data-target="#exampleModal2" data-whatever="@mdo"><i class="fa fa-pencil-square fa-2x"></i></a></span>
+              <?php endif; ?>
+
               <hr>
               <div class="">
                 <span><strong>Cell Number:</strong></span>
@@ -259,10 +280,15 @@
                           <?php else: ?>
                             <span><strong> Position:</strong> position name</span>
                           <?php endif; ?>
-                          <span class="edit-contact pull-right"><a href="" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-pencil-square fa-2x"></i></a></span>
+                          <?php if ($_SESSION['user_id'] != $pro->user_id): ?>
+
+                          <?php else: ?>
+                            <span class="edit-contact pull-right"><a href="javascript:void(0)" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-pencil-square fa-2x"></i></a></span>
+                          <?php endif; ?>
+
                           <hr>
                           <?php if (!empty($pro->bio)): ?>
-                            <p><?php echo $pro->bio; ?></p>
+                            <p><?php echo nl2br($pro->bio); ?></p>
                           <?php else: ?>
                             <h3>Your bio</h3>
                           <?php endif; ?>
@@ -316,38 +342,128 @@
             </div>
 
           </div>
-          <div class="">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-                  aria-selected="true">Posts</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                  aria-selected="false">Liked posts</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
-                  aria-selected="false">Saved posts</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="bookmarks-tab" data-toggle="tab" href="#bookmark" role="tab" aria-controls="bookmark"
-                  aria-selected="false">bookmarks</a>
-              </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">three</div>
-              <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">one</div>
-              <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">two</div>
-              <div class="tab-pane fade" id="bookmark" role="tabpanel" aria-labelledby="contact-tab">four</div>
+
+          <?php if ($_SESSION['user_id'] != $pro->user_id): ?>
+
+          <?php else: ?>
+            <div class="">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                    aria-selected="true">Posts</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                    aria-selected="false">Liked posts</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+                    aria-selected="false">Saved posts</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="bookmarks-tab" data-toggle="tab" href="#bookmark" role="tab" aria-controls="bookmark"
+                    aria-selected="false">bookmarks</a>
+                </li>
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                  <?php foreach ($data['PostCount'] as $counter): ?>
+                    <?php if ($counter->Total_Posts == 0): ?>
+                      You don't have post/s yet...
+                    <?php endif; ?>
+                  <?php endforeach; ?>
+                  <?php foreach ($data['userPost'] as $myPosts): ?>
+                      <section>
+                        <div class="container">
+                          <div class="row justify-content-start">
+                            <div class="col-12 col-xl-7">
+                              <div class="card card-body mb-3">
+                                  <h4 class="card-title"></h4>
+                                  <div class="mb-3 image-user" style="margin-top: -1em;">
+                                    <a href="<?php echo URLROOT; ?>/profile?username=<?php echo $_SESSION['name']; ?>">
+                                      <?php if (!empty($myPosts->profile_pic)): ?>
+                                        <img src="<?php echo URLROOT;?>/<?php echo $myPosts->profile_pic; ?>" width="40" height="40" alt="profile pic">
+                                      <?php else: ?>
+                                        <img src="./public/assets/blank-profile.png" width="40" height="40" alt="profile pic">
+                                      <?php endif; ?>
+                                    </a>
+                                    <a href="<?php echo URLROOT; ?>/profile?username=<?php echo $_SESSION['name']; ?>" class="name-position"><?php echo $myPosts->firstname; ?></a><br>
+                                    <a href="" class="time-position"><?php echo get_time_ago($myPosts->posted_at); ?></a>
+
+                                    <a href="#" class="a-move pull-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-h fa-lg"></i></a>
+                                    <div class="dropdown-menu">
+                                      <?php if ($_SESSION['user_id'] != $myPosts->user_id): ?>
+                                        <a class="dropdown-item" href="#"><i class="fa fa-bug"></i> Report post</a>
+                                      <?php else: ?>
+                                        <a class="dropdown-item" href="<?php echo URLROOT; ?>/posts/edit/<?php echo $myPosts->post_id;?>"><i class="fa fa-pencil"></i> Edit post</a>
+                                        <a class="dropdown-item" href="<?php echo URLROOT; ?>/posts/deleteFromU/<?php echo $myPosts->post_id;?>" data-toggle="modal" data-target="#deleteModal<?php echo $myPosts->post_id;?>">
+                                          <i class="fa fa-trash" aria-hidden='true'></i> Delete post
+                                        </a>
+                                      <?php endif; ?>
+                                    </div>
+                                    <!--Delete Post-->
+                                        <div class="modal fade" id="deleteModal<?php echo $myPosts->post_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                              <form class="" action="<?php echo URLROOT; ?>/posts/deleteFromU/<?php echo $myPosts->post_id;?>" method="get">
+                                                <div class="modal-body">
+                                                  Are you Sure you want delete this post?
+                                                </div>
+                                                <div class="modal-footer">
+                                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No cancel</button>
+                                                  <button type="submit" class="btn btn-danger">Yes delete</button>
+                                                </div>
+                                              </form>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    <!-- End Delete -->
+                                    <!-- Basic dropdown -->
+                                    <span class="pull-right">
+                                      <a href="" class="mr-4">
+                                        <i class="fa fa-bookmark fa-lg" aria-hidden="true"></i>
+                                      </a>
+                                      <a href="#">
+                                        <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+                                      </a>
+                                    </span>
+                                  </div>
+                                  <p class="card-text" style="margin-bottom: .1rem;">
+                                      <?php echo getPostLink(nl2br($myPosts->post)); ?>
+                                  </p>
+                                  <div class="feed-body">
+                                   <?php if (!empty($myPosts->post_image && $myPosts->post_image != "assets/posts/")): ?>
+                                     <div class="post-image-style">
+                                       <img src="<?php echo URLROOT;?>/<?php echo $myPosts->post_image; ?>" width="570" height="300" alt="post image">
+                                     </div>
+                                   <?php endif; ?>
+                                 </div>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  <?php endforeach; ?>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">one</div>
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">two</div>
+                <div class="tab-pane fade" id="bookmark" role="tabpanel" aria-labelledby="contact-tab">four</div>
+              </div>
             </div>
-          </div>
+          <?php endif; ?>
+
         </div>
         <div class="tab-pane fade" id="favourite" role="tabpanel">
           <div class="content-wraper-out-favourite">
             <div class="content-wraper-inside">
               <h1 class="h4">My favourite stuff</h1>
-              <span class="edit-contact pull-right"><a href="" data-toggle="modal" data-target="#orangeModalSubscription"><i class="fa fa-pencil-square fa-2x"></i></a></span>
+              <span class="edit-contact pull-right"><a href="javascript:void(0)" data-toggle="modal" data-target="#orangeModalSubscription"><i class="fa fa-pencil-square fa-2x"></i></a></span>
               <div class="modal fade" id="orangeModalSubscription" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                   aria-hidden="true">
                   <div class="modal-dialog modal-notify" role="document">
@@ -366,7 +482,7 @@
                         <div class="container">
                           <div class="row justify-content-center">
                             <div class="col-12 col-md-8 col-lg-8 col-xl-10">
-                              <form class="" action="<?php echo URLROOT; ?>/profile/favourite/<?php echo $data['id']; ?>" method="post">
+                              <form class="" action="<?php echo URLROOT; ?>/profile/favourite" method="post">
                               <div class="row align-items-center">
                                 <div class="col mt-4">
                                   <input type="text" name="music" class="form-control" value="<?php if(isset($pro->music)) {echo $pro->music;} ?>" placeholder="Music">
@@ -389,7 +505,7 @@
                               </div>
                               <div class="row justify-content-start mt-4">
                                 <div class="col">
-                                  <button class="btn btn-primary btn-block mt-1 mb-4" data-disable-with="Updating data...">Update</button>
+                                  <button type="submit" class="btn btn-primary btn-block mt-1 mb-4" data-disable-with="Updating data...">Update</button>
                                 </div>
                               </div>
                               </form>
@@ -478,7 +594,7 @@
           <div class="content-wraper-out-privacy">
             <div class="content-wraper-inside">
               <h1 class="h4">Privacy and safety</h1>
-              <span class="edit-contact pull-right"><a href="#"><i class="fa fa-pencil-square fa-2x"></i></a></span>
+              <span class="edit-contact pull-right"><a href="javascript:void(0)"><i class="fa fa-pencil-square fa-2x"></i></a></span>
               <hr>
               <div class="privacy-content">
 
@@ -490,7 +606,7 @@
           <div class="content-wraper-out-security">
             <div class="content-wraper-inside">
               <h1 class="h4">Security</h1>
-              <span class="edit-contact pull-right"><a href="#"><i class="fa fa-pencil-square fa-2x"></i></a></span>
+              <span class="edit-contact pull-right"><a href="javascript:void(0)"><i class="fa fa-pencil-square fa-2x"></i></a></span>
               <hr>
               <div class="security-content">
 
@@ -502,7 +618,7 @@
           <div class="content-wraper-out-manage">
             <div class="content-wraper-inside">
               <h1 class="h4">Manage posts</h1>
-              <span class="edit-contact pull-right"><a href="#"><i class="fa fa-pencil-square fa-2x"></i></a></span>
+              <span class="edit-contact pull-right"><a href="javascript:void(0)"><i class="fa fa-pencil-square fa-2x"></i></a></span>
               <hr>
               <div class="manage-content">
 
@@ -514,7 +630,7 @@
           <div class="content-wraper-out-friends">
             <div class="content-wraper-inside">
               <h1 class="h4">Friends and Best friends</h1>
-              <span class="edit-contact pull-right"><a href="#"><i class="fa fa-pencil-square fa-2x"></i></a></span>
+              <span class="edit-contact pull-right"><a href="javascript:void(0)"><i class="fa fa-pencil-square fa-2x"></i></a></span>
               <hr>
               <div class="friends-content">
 
@@ -526,7 +642,7 @@
           <div class="content-wraper-out-friends">
             <div class="content-wraper-inside">
               <h1 class="h4">Find Match</h1>
-              <span class="edit-contact pull-right"><a href="#"><i class="fa fa-pencil-square fa-2x"></i></a></span>
+              <span class="edit-contact pull-right"><a href="javascript:void(0)"><i class="fa fa-pencil-square fa-2x"></i></a></span>
               <hr>
               <div class="friends-content">
 
@@ -535,40 +651,47 @@
           </div>
         </div>
       </div>
-      <div class="pull-right left-controller-option">
-        <div class="card-size-resize">
-          <!--col-md-3 col-xl-3-->
-           <div class="card">
-               <div class="card-header">
-                   <h5 class="card-title mb-0">Information</h5>
-               </div>
 
-               <div class="list-group list-group-flush" role="tablist">
-                   <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account" role="tab">
-                     Default
-                   </a>
-                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#friends" role="tab">
-                     Friends(257) Best friends(54)
-                   </a>
-                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#favourite" role="tab">
-                     Favourite
-                   </a>
-                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#match" role="tab">
-                     Find Match
-                   </a>
-                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#privacy" role="tab">
-                     Privacy and safety
-                   </a>
-                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#security" role="tab">
-                     Security
-                   </a>
-                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#manage" role="tab">
-                     Manage activies
-                   </a>
-               </div>
+        <?php if ($_SESSION['user_id'] != $pro->user_id): ?>
+
+        <?php else: ?>
+          <div class="pull-right left-controller-option">
+            <div class="card-size-resize">
+              <!--col-md-3 col-xl-3-->
+               <div class="card">
+                   <div class="card-header">
+                       <h5 class="card-title mb-0">Information</h5>
+                   </div>
+
+                   <div class="list-group list-group-flush" role="tablist">
+                       <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account" role="tab">
+                         Default
+                       </a>
+                       <a class="list-group-item list-group-item-action" data-toggle="list" href="#friends" role="tab">
+                         Friends(257) Best friends(54)
+                       </a>
+                       <a class="list-group-item list-group-item-action" data-toggle="list" href="#favourite" role="tab">
+                         Favourite
+                       </a>
+                       <a class="list-group-item list-group-item-action" data-toggle="list" href="#match" role="tab">
+                         Find Match
+                       </a>
+                       <a class="list-group-item list-group-item-action" data-toggle="list" href="#privacy" role="tab">
+                         Privacy and safety
+                       </a>
+                       <a class="list-group-item list-group-item-action" data-toggle="list" href="#security" role="tab">
+                         Security
+                       </a>
+                       <a class="list-group-item list-group-item-action" data-toggle="list" href="#manage" role="tab">
+                         Manage activies
+                       </a>
+                   </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+        <?php endif; ?>
+
+
         <div class="">
 
       </div>

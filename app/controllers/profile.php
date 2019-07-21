@@ -3,6 +3,7 @@
 class Profile extends Controller{
     public function __construct(){
       $this->userModel = $this->model('User');
+      $this->postModel = $this->model('Post');
     }
 
     public function index(){
@@ -10,14 +11,35 @@ class Profile extends Controller{
           redirect('users/login');
         }
 
-        $profile = $this->userModel->getProfile();
-        $data = [
-            'profile' => $profile,
-            'title' => 'Hey this is your profile',
-            'description' => 'Lets code',
-        ];
+        if (isset($_GET['username']) === true && empty($_GET['username']) === false) {
 
-        $this->view('profile/index', $data);
+          $username = trim($_GET['username']);
+          $profileId = $this->userModel->getUserIDById($username);
+          //die(print_r($profileId,true));
+          $profileData = $this->userModel->userData($profileId);
+          //die(print_r($profileData,true));
+          $user_id = $_SESSION['user_id'];
+          $user = $this->userModel->userData($user_id);
+          $UserPost = $this->postModel->userPost($profileId);
+          $CountPost = $this->postModel->countPost($profileId);
+
+          $data = [
+              'user' => $user,
+              'profileData' => $profileData,
+              'PostCount' => $CountPost,
+              'userPost' => $UserPost,
+              'title' => 'Hey this is your profile',
+              'description' => 'Lets code',
+          ];
+
+          if (!$profileData) {
+            redirect('posts');
+          }
+
+          $this->view('profile/index', $data);
+
+        }
+
 
     }
 
@@ -52,12 +74,12 @@ class Profile extends Controller{
 
 
         if(empty($data['firstname']) && empty($data['lastname']) && empty($data['email']) && empty($data['address']) && empty($data['gender']) && empty($data['hobby'])){
-            redirect('profile');
+            redirect('profile?username='.$_SESSION['name']);
          }
          else{
             if($this->userModel->updateProfile($data)){
               flash('profile_updated', 'Profile updated');
-              redirect('profile');
+              redirect('profile?username='.$_SESSION['name']);
             }else{
               echo '<script language="javascript">';
               echo 'alert("Sorry something went wrong")';  //not showing an alert box.
@@ -99,12 +121,12 @@ class Profile extends Controller{
 
        // check if inputs are empty then conn
        if(empty($data['music']) && empty($data['movies']) && empty($data['books']) && empty($data['animals'])){
-           redirect('profile');
+           redirect('profile?username='.$_SESSION['name']);
         }
         else{
            if($this->userModel->updateFavourite($data)){
              flash('profile_updated', 'Profile updated');
-             redirect('profile');
+             redirect('profile?username='.$_SESSION['name']);
            }else{
              echo '<script language="javascript">';
              echo 'alert("Sorry something went wrong")';  //not showing an alert box.
@@ -160,15 +182,15 @@ class Profile extends Controller{
         if(move_uploaded_file( $_FILES['image']['tmp_name'], $path)) {
           if($this->userModel->updatePro_picture($data)) {
             flash('profile_updated', 'Profile updated');
-            redirect('profile');
+            redirect('profile?username='.$_SESSION['name']);
           }else {
             flash('error-profile', '<span class="text-danger">Sorry, something went wrong.</span>');
-            redirect('profile');
+            redirect('profile?username='.$_SESSION['name']);
           }
         }
       }else{
         flash('error-profile', '<span class="text-danger">Sorry, only JPG, JPEG, PNG & GIF  files are allowed AND file size must be less than or equals 2mb.</span>');
-        redirect('profile');
+        redirect('profile?username='.$_SESSION['name']);
       }
 
   }else{
@@ -219,15 +241,15 @@ class Profile extends Controller{
           if(move_uploaded_file( $_FILES['image']['tmp_name'], $path)) {
             if($this->userModel->updatePro_cover($data)) {
               flash('profile_updated', 'Profile updated');
-              redirect('profile');
+              redirect('profile?username='.$_SESSION['name']);
             }else {
               flash('error-profile', '<span class="text-danger">Sorry, something went wrong.</span>');
-              redirect('profile');
+              redirect('profile?username='.$_SESSION['name']);
             }
           }
         }else{
           flash('error-profile', '<span class="text-danger">Sorry, only JPG, JPEG, PNG & GIF  files are allowed AND file size must be less than or equals 2mb.</span>');
-          redirect('profile');
+          redirect('profile?username='.$_SESSION['name']);
         }
 
     }else{
@@ -261,12 +283,12 @@ class Profile extends Controller{
 
 
         if(empty($data['job']) && empty($data['position']) && empty($data['bio'])){
-            redirect('profile');
+            redirect('profile?username='.$_SESSION['name']);
          }
          else{
             if($this->userModel->updateBio($data)){
               flash('profile_updated', 'Profile updated');
-              redirect('profile');
+              redirect('profile?username='.$_SESSION['name']);
             }else{
               echo '<script language="javascript">';
               echo 'alert("Sorry something went wrong")';  //not showing an alert box.

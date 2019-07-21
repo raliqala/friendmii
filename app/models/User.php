@@ -190,6 +190,17 @@
       return $row;
     }
 
+    public function getUserIDById($username){
+      //die(print_r($username,true));
+      $this->db->query("SELECT user_id FROM users WHERE firstname = :firstname");
+      $this->db->bind(':firstname', $username);
+
+      $row = $this->db->single();
+      $userid = $row->user_id;
+
+      return $userid;
+    }
+
     public function recover_password($email){
 
         if(isset($_SESSION['token']) && $_POST['token'] === $_SESSION['token']){
@@ -360,14 +371,25 @@
 
    }
 
-   //profile functions
+
    public function getProfile(){
-     $id = $_SESSION['user_id'];
-     $this->db->query('SELECT user_id, firstname, lastname, email, dob, gender, address, cellno, hobby, cover_image, image AS profile_pic, video_descryption, acount_created_at AS joined_date, last_active, job_name, job_title, bio, music, movies, books, animals FROM users WHERE user_id = :user_id');
+     $user_id = $_SESSION['user_id'];
+     $this->db->query('SELECT * FROM users WHERE user_id = :user_id');
+     $this->db->bind(':user_id', $user_id);
+     $results = $this->db->resultset();
+     if ($this->db->rowCount($results) > 0) {
+       return $results;
+     }else {
+       return false;
+     }
+   }
+
+   //profile functions
+   public function userData($id){
+     $this->db->query('SELECT * FROM users WHERE user_id = :user_id');
      $this->db->bind(':user_id', $id);
      $results = $this->db->resultset();
      if ($this->db->rowCount($results) > 0) {
-
        return $results;
      }else {
        return false;

@@ -1,33 +1,33 @@
 <link href="<?php echo URLROOT; ?>/css/mdb.min.css" rel="stylesheet">
 
 <!-- Sidebar navigation -->
-   <div id="slide-out" class="side-nav sn-bg-4 fixed">
-     <ul class="custom-scrollbar">
+   <!-- <div id="slide-out" class="side-nav sn-bg-4 fixed">
+     <ul class="custom-scrollbar"> -->
        <!-- Logo -->
-       <li>
+       <!-- <li>
          <div class="logo-wrapper waves-light">
            <a href="#"><img src="./public/assets/friendmii-logo transparent.png" class="img-fluid flex-center"></a>
          </div>
-       </li>
+       </li> -->
        <!--/. Logo -->
        <!--Social-->
-       <li>
+       <!-- <li>
          <ul class="social">
-           <li><a href="#" class="icons-sm fb-ic"><?php echo $_SESSION['name']; ?></a></li>
+           <li><a href="#" class="icons-sm fb-ic">name</a></li>
          </ul>
-       </li>
+       </li> -->
        <!--/Social-->
        <!--Search Form-->
-       <li>
+       <!-- <li>
          <form class="search-form" role="search">
            <div class="form-group md-form mt-0 pt-1 waves-light">
              <input type="text" class="form-control" placeholder="Search">
            </div>
          </form>
-       </li>
+       </li> -->
        <!--/.Search Form-->
        <!-- Side navigation links -->
-       <li>
+       <!-- <li>
          <ul class="collapsible collapsible-accordion">
            <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-chevron-right"></i> Submit blog<i
                  class="fa fa-angle-down rotate-icon"></i></a>
@@ -72,11 +72,11 @@
              </div>
            </li>
          </ul>
-       </li>
+       </li> -->
        <!--/. Side navigation links -->
-     </ul>
+     <!-- </ul>
      <div class="sidenav-bg mask-strong"></div>
-   </div>
+   </div> -->
    <!--/. Sidebar navigation -->
 <!--Navbar -->
 <nav class="mb-4 navbar fixed-top navbar-expand-lg navbar-dark default-color">
@@ -93,7 +93,7 @@
 
    <!-- Collapsible content -->
    <div class="collapse navbar-collapse" id="basicExampleNav">
- <a href="#" data-activates="slide-out" class="button-collapse white-text"><i class="fa fa-bars"></i></a>
+ <!-- <a href="#" data-activates="slide-out" class="button-collapse white-text"><i class="fa fa-bars"></i></a> -->
      <!-- Links -->
      <ul class="navbar-nav mr-auto mx-auto custom-links">
        <li class="nav-item ">
@@ -102,7 +102,7 @@
          </a>
        </li>
        <li class="nav-item">
-         <a class="nav-link" href="#"><i class="fa fa-question-circle" aria-hidden="true"></i> </a>
+         <a class="nav-link" href="<?php echo URLROOT; ?>/pages/help"><i class="fa fa-question-circle" aria-hidden="true"></i> </a>
        </li>
        <li class="nav-item">
          <a class="nav-link" href="#"><i class="fa fa-envelope" aria-hidden="true"></i> </a>
@@ -125,15 +125,15 @@
      <!-- Links -->
 
 
-       <form class="form-inline my-2 my-lg-0 ml-4" action="<?php echo URLROOT; ?>/posts/search" method="post">
-         <input class="form-control" name="search" type="search" placeholder="Search" aria-label="Search">
+       <form class="form-inline my-2 my-lg-0 ml-4" action="<?php echo URLROOT; ?>/posts/search" method="">
+         <input class="form-control" name="search"  id="country" type="search" placeholder="Search" aria-label="Search" autocomplete="off">
          <button class="mr-4" style="background: transparent; border: none; margin-left: -2em;" type="submit"> <i class="fa fa-search"></i> </button>
        </form>
    </div>
    <!-- Collapsible content -->
    <ul class="navbar-nav ml-auto nav-flex-icons">
       <li class="nav-item">
-        <a href="<?php echo URLROOT; ?>/profile" class="nav-link waves-effect waves-light">
+        <a href="<?php echo URLROOT; ?>/profile?username=<?php echo $_SESSION['name']; ?>" class="nav-link waves-effect waves-light">
           <?php echo $_SESSION['name']; ?>
         </a>
       </li>
@@ -141,14 +141,14 @@
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
             <?php if (!empty($_SESSION['profile_pic'])): ?>
-              <img src='<?php echo $_SESSION['profile_pic'] ?>' class="rounded-circle z-depth-0" alt='profile'>
+              <img src='<?php echo URLROOT; ?>/<?php echo $_SESSION['profile_pic']; ?>' class="rounded-circle z-depth-0" alt='profile'>
             <?php else: ?>
               <img src="./public/assets/blank-profile.png" width="40" height="40" class="img-circle img-responsive" alt='profile'>
             <?php endif; ?>
         </a>
         <div class="dropdown-menu dropdown-menu-left dropdown-default"
           aria-labelledby="navbarDropdownMenuLink-55">
-          <a class="dropdown-item" href="<?php echo URLROOT; ?>/profile">Signed in as <strong><?php echo $_SESSION['name'];?></strong></a>
+          <a class="dropdown-item" href="<?php echo URLROOT; ?>/profile?username=<?php echo $_SESSION['name']; ?>">Signed in as <strong><?php echo $_SESSION['name'];?></strong></a>
           <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Change theme</a>
             <a class="dropdown-item" href="#"><i class="fa fa-info-circle" aria-hidden="true"></i> Terms</a>
@@ -163,3 +163,30 @@
  </nav>
  <!--/.Navbar-->
 <!--/.Navbar -->
+ <!-- <script type="text/javascript">
+  $(document).ready(function(){
+    $("#country").keyup(function(){
+      var query = $(this).val();
+      if (query != "") {
+        $.ajax({
+                url: '/posts/search',
+                method: 'POST',
+                data: {query:query},
+                success: function(data)
+                {
+                  $('#results').html(data);
+                  $('#results').css('display', 'block');
+                    $("#country").focusout(function(){
+                        $('#results').css('display', 'none');
+                    });
+                    $("#country").focusin(function(){
+                        $('#results').css('display', 'block');
+                    });
+                }
+        });
+      } else {
+             $('#results').css('display', 'none');
+      }
+    });
+  });
+</script> -->

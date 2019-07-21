@@ -41,7 +41,7 @@
           <div class="row align-items-center mt-2">
             <div class="col">
             <select class="form-control" name="gender">
-                <option selected disabled>Please select your gender</option>
+                <option selected disabled><?php if(!empty($data['gender'])){echo $data['gender'];}else{echo 'Please select your gender';} ?></option>
                 <option value="Female">Female</option>
                 <option value="Male">Male</option>
                 <option value="Agender">Agender</option>

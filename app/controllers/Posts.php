@@ -12,9 +12,12 @@
     // Load All Posts
     public function index(){
 
+      //$UserLikedCheck = $this->postModel->UserLikedOrNot();
+      $comments = $this->postModel->getComments();
       $posts = $this->postModel->getPosts();
         $data = [
-          'posts' => $posts
+          'comments' => $comments,
+          'posts' => $posts,
       ];
 
       $this->view('posts/index', $data);
@@ -76,20 +79,27 @@
 
               //die(print_r(isset($filename) && !empty($filename) && !empty($data['post_text']) && !empty($data['image']),true));
               if (isset($filename) && !empty($filename) && !empty($data['post_text']) && !empty($data['image'])) {
-                if (in_array($ext,$allowed) && $file_size < 2097152 && $file_size != 0) {
-                  if(move_uploaded_file($_FILES['image']['tmp_name'], $path)) {
-                    if($this->postModel->addPost($data)) {
-                      redirect('posts');
-                      exit();
-                    }else {
-                      flashErr('error-post', '<span>Sorry something went wrong.</span>');
-                      redirect('posts');
+                if (in_array($ext,$allowed)) {
+                  if ($file_size < 2097152 && $file_size != 0) {
+                    if(move_uploaded_file($_FILES['image']['tmp_name'], $path)) {
+                      if($this->postModel->addPost($data)) {
+                        redirect('posts');
+                        exit();
+                      }else {
+                        flashErr('error-post', '<span>Sorry, something went wrong</span>');
+                        redirect('posts');
+                        exit();
+                      }
                     }
+                  } else {
+                    flashErr('error-post', '<span>Sorry, your file is too large it should be less then or equals 2MB.</span>');
+                    redirect('posts');
+                    exit();
                   }
-                }
-                else{
-                  flashErr('error-post', '<span>Sorry only JPG, JPEG, PNG & GIF  files are allowed AND file size must be less than or equals 2mb.</span>');
+                } else{
+                  flashErr('error-post', '<span>Sorry, only JPG, JPEG, PNG & GIF files are allowed..</span>');
                   redirect('posts');
+                  exit();
                 }
 
               }
@@ -100,27 +110,36 @@
                   redirect('posts');
                   exit();
                 }else {
-                  flashErr('error-post', '<span>Sorry something went wrong.</span>');
+                  flashErr('error-post', '<span>Sorry, something went wrong</span>');
                   redirect('posts');
+                  exit();
                 }
               }
 
 
               //die(print_r(isset($filename) && !empty($filename) && !empty($data['image']), true));
               if (isset($filename) && !empty($filename) && !empty($data['image'])) {
-                if (in_array($ext,$allowed) && $file_size < 2097152 && $file_size != 0) {
-                  if(move_uploaded_file( $_FILES['image']['tmp_name'], $path)) {
-                    if($this->postModel->addPost($data)) {
-                      redirect('posts');
-                      exit();
-                    }else {
-                      flashErr('error-post', '<span>Sorry something went wrong.</span>');
-                      redirect('posts');
+                if (in_array($ext,$allowed)) {
+                  if ($file_size < 2097152 && $file_size != 0) {
+                    if(move_uploaded_file($_FILES['image']['tmp_name'], $path)) {
+                      if($this->postModel->addPost($data)) {
+                        redirect('posts');
+                        exit();
+                      }else {
+                        flashErr('error-post', '<span>Sorry, something went wrong</span>');
+                        redirect('posts');
+                        exit();
+                      }
                     }
+                  } else {
+                    flashErr('error-post', '<span>Sorry, your file is too large it should be less then or equals 2MB.</span>');
+                    redirect('posts');
+                    exit();
                   }
                 }else{
-                  flashErr('error-post', '<span>Sorry, only JPG, JPEG, PNG & GIF  files are allowed AND file size must be less than or equals 2mb.</span>');
+                  flashErr('error-post', '<span>Sorry, only JPG, JPEG, PNG & GIF files are allowed..</span>');
                   redirect('posts');
+                  exit();
                 }
               }
 
@@ -137,158 +156,270 @@
     public function edit($id){
       //die(print_r($id,true));
       if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $postFile = $this->postModel->getPostById($id);
         // Sanitize POST
         $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-        $folder ="assets/posts/";
-
         $image = $_FILES['image']['name'];
-
-        $path = $folder . $image ;
-
-        $data = [
-            'post_text' => trim($_POST['post_text']),
-            'image' => trim($path),
-            'id'  => trim($id),
-            'post_text_err' => '',
-            'image_err' => ''
-        ];
-        //die(print_r(isset($data['post_text']), true));
-        //die(print_r("nooo", true));
-        $target_file=$folder.basename($_FILES["image"]["name"]);
-
-
-        $imageFileType=pathinfo($target_file,PATHINFO_EXTENSION);
-
+        //die(print_r(!empty($image),true));
+        $temp_name = $_FILES['image']['tmp_name'];
         $file_size =$_FILES['image']['size'];
-        //die(print_r($file_size,true));
-        $allowed=array('jpeg','png' ,'jpg', 'gif');
 
-        $filename=$_FILES['image']['name'];
+        if (!empty($image)) {
+          $folder ="assets/posts/";
+          $path = $folder . $image ;
+          $target_file=$folder.basename($_FILES["image"]["name"]);
 
-        $ext=pathinfo($filename, PATHINFO_EXTENSION);
+          $imageFileType=pathinfo($target_file,PATHINFO_EXTENSION);
 
+          $allowed=array('jpeg','png' ,'jpg', 'gif');
 
-         // Validate email
-         if(empty($data['post_text']) && empty($filename) && !isset($filename)){
-           $data['post_text_err'] = 'you cannot post nothing.';
-         }
+          $filename=$_FILES['image']['name'];
 
+          $ext=pathinfo($filename, PATHINFO_EXTENSION);
 
-        // Make sure there are no errors
-        if(empty($data['post_text_err'])){
+          if(in_array($ext,$allowed)){
 
-          if (isset($filename) && !empty($filename) && !empty($data['post_text']) && !empty($data['image'])) {
-            if (in_array($ext,$allowed) && $file_size < 2097152 && $file_size != 0) {
-              if(move_uploaded_file($_FILES['image']['tmp_name'], $path)) {
-                if($this->postModel->updatePost($data)) {
-                  redirect('posts');
-                  exit();
-                }else {
-                  flashErr('error-post', '<span>Sorry something went wrong.</span>');
-                  redirect('posts');
-                }
-              }
+            if($file_size < 2097152 && $file_size != 0){
+             unlink($postFile->image);
+             $data = [
+                 'post_text' => trim($_POST['post_text']),
+                 'image' => trim($path),
+                 'id'  => trim($id),
+                 'post_text_err' => '',
+                 'image_err' => ''
+             ];
+             if (move_uploaded_file($temp_name, $path)) {
+               if($this->postModel->updatePost($data)) {
+                 redirect('posts');
+                 exit();
+               }else {
+                 flashErr('error-post', '<span>Sorry, something went wrong</span>');
+                 redirect('posts');
+                 exit();
+               }
+             }
+
             }
             else{
-              flashErr('error-post', '<span>Sorry only JPG, JPEG, PNG & GIF  files are allowed AND file size must be less than or equals 2mb.</span>');
-              redirect('posts');
+             flashErr('error-post', '<span>Sorry, your file is too large it should be less then or equals 2MB.</span>');
+             redirect('posts');
+             exit();
             }
+           }
+           else{
+            flashErr('error-post', '<span>Sorry, only JPG, JPEG, PNG & GIF files are allowed..</span>');
+            redirect('posts');
+            exit();
+           }
 
-          }
+        }else {
+          $path = $postFile->image;
 
-          //die(print_r(isset($filename) && !empty($filename) && !empty($data['post_text']) && !empty($data['image']),true));
-          if (isset($data['post_text']) && !empty($data['post_text'])) {
+          $data = [
+              'post_text' => trim($_POST['post_text']),
+              'image' => trim($path),
+              'id'  => trim($id),
+              'post_text_err' => '',
+              'image_err' => ''
+          ];
+
             if($this->postModel->updatePost($data)) {
               redirect('posts');
               exit();
             }else {
-              flashErr('error-post', '<span>Sorry something went wrong.</span>');
+              flashErr('error-post', '<span>Sorry, something went wrong</span>');
               redirect('posts');
+              exit();
             }
-          }
 
-
-          //die(print_r(isset($filename) && !empty($filename) && !empty($data['image']), true));
-          if (isset($filename) && !empty($filename) && !empty($data['image'])) {
-            if (in_array($ext,$allowed) && $file_size < 2097152 && $file_size != 0) {
-              if(move_uploaded_file( $_FILES['image']['tmp_name'], $path)) {
-                if($this->postModel->updatePost($data)) {
-                  redirect('posts');
-                  exit();
-                }else {
-                  flashErr('error-post', '<span>Sorry something went wrong.</span>');
-                  redirect('posts');
-                }
-              }
-            }else{
-              flashErr('error-post', '<span>Sorry, only JPG, JPEG, PNG & GIF  files are allowed AND file size must be less than or equals 2mb.</span>');
-              redirect('posts');
-            }
-          }
-        } else {
-          // Load view with errors
-          $this->view('posts/edit', $data);
         }
 
       } else {
-        // Get post from model
-        $post = $this->postModel->getPostById($id);
-
-        // Check for owner
-        if($post->user_id != $_SESSION['user_id']){
-          redirect('posts');
-        }
-
-        $data = [
-          'id' => $id,
-          'post' => $post->post,
-          'image' => $post->image,
-        ];
-
-        $this->view('posts/edit', $data);
+        $this->view('posts', $data);
       }
     }
 
     // // Delete Post
     public function delete($id){
       //die(print_r($id,true));
+      $postFile = $this->postModel->getPostById($id);
+      //die(print_r($postFile->image,true));
       if($_SERVER['REQUEST_METHOD'] == 'GET'){
         //Execute
-        if($this->postModel->deletePost($id)){
-          // Redirect to login
-          flash('post_message', 'Post Removed');
-          redirect('posts');
-          } else {
-            flashErr('error-post', '<span>Sorry, something went wrong</span>');
+        if (file_exists($postFile->image)) {
+          unlink($postFile->image);
+          if($this->postModel->deletePost($id)){
+            flash('post_message', 'Post Removed');
             redirect('posts');
-          }
+            } else {
+              flashErr('error-post', '<span>Sorry, something went wrong</span>');
+              redirect('posts');
+              exit();
+            }
+        }else {
+          if($this->postModel->deletePost($id)){
+            flash('post_message', 'Post Removed');
+            redirect('posts');
+            } else {
+              flashErr('error-post', '<span>Sorry, something went wrong</span>');
+              redirect('posts');
+              exit();
+            }
+        }
       } else {
         redirect('posts');
       }
     }
 
-    public function search(){
-
-      if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        $data = [
-          'run-away' => trim($_POST['search']),
-        ];
-
-        $search = $this->postModel->search($data['run-away']);
-        if ($search) {
-          echo '<script language="javascript">';
-          echo 'alert("It works")';  //not showing an alert box.
-          echo '</script>';
+    // // Delete Post from user
+    public function deleteFromU($id){
+      //die(print_r($id,true));
+      $postFile = $this->postModel->getPostById($id);
+      //die(print_r($postFile->image,true));
+      if($_SERVER['REQUEST_METHOD'] == 'GET'){
+        //Execute
+        if (file_exists($postFile->image)) {
+          unlink($postFile->image);
+          if($this->postModel->deletePost($id)){
+            flash('post_message', 'Post Removed');
+            redirect('profile?username='.$_SESSION['name']);
+            } else {
+              flashErr('error-post', '<span>Sorry, something went wrong</span>');
+              redirect('profile?username='.$_SESSION['name']);
+              exit();
+            }
         }else {
-          die('sorry');
+          if($this->postModel->deletePost($id)){
+            flash('post_message', 'Post Removed');
+            redirect('profile?username='.$_SESSION['name']);
+            } else {
+              flashErr('error-post', '<span>Sorry, something went wrong</span>');
+              redirect('profile?username='.$_SESSION['name']);
+              exit();
+            }
         }
-      }else {
-        echo '<script language="javascript">';
-        echo 'alert("not get")';  //not showing an alert box.
-        echo '</script>';
+      } else {
+        redirect('profile?username='.$_SESSION['name']);
       }
     }
 
-  }
+    public function savePost($id){
+
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        //Sanitize
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+        $data = [
+            'user_id' => trim($_SESSION['user_id']),
+            'post_id'  => trim($id),
+        ];
+
+        if ($this->postModel->saved_post_exist($id)) {
+          echo json_encode(0);
+        }else {
+          if ($this->postModel->save_Post($data)) {
+            echo json_encode(1);
+          }else {
+            echo json_encode(0);
+          }
+        }
+
+      }else {
+        redirect('posts');
+      }
+    }
+
+    public function reportPost($id){
+
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        //Sanitize
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+        $data = [
+            'user_id' => trim($_SESSION['user_id']),
+            'post_id'  => trim($id),
+            'report' => trim($_POST['report']),
+        ];
+
+          if ($this->postModel->report_Post($data)) {
+            flash('report_message', 'Report recieved');
+            redirect('posts');
+          }else {
+            flashErr('error-post', '<span>Sorry, something went wrong</span>');
+            redirect('profile');
+            exit();
+          }
+
+      }else {
+        redirect('posts');
+      }
+    }
+
+    public function AddComment(){
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+        $data = [
+          'user_id' => trim($_SESSION['user_id']),
+          'post_id' => trim($_POST['pid']),
+          'comment_text' => trim($_POST['comment_text']),
+        ];
+
+        if ($this->postModel->commentPost($data)) {
+          echo json_encode(1);
+        }else {
+          echo json_encode(0);
+        }
+
+
+      }else {
+        redirect('posts');
+      }
+
+    }
+
+    public function AddLike(){
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+        $data = [
+          'user_id' => trim($_SESSION['user_id']),
+          'post_id' => trim($_POST['postid']),
+        ];
+
+        if ($this->postModel->likePost($data)) {
+          echo json_encode(1);
+        }else {
+          echo json_encode(0);
+        }
+
+
+      }else {
+        redirect('posts');
+      }
+    }
+
+    public function removeLike(){
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+        $data = [
+          'user_id' => trim($_SESSION['user_id']),
+          'post_id' => trim($_POST['postid']),
+        ];
+        die(print_r($this->postModel->unlikePost($data),true));
+        if ($this->postModel->unlikePost($data)) {
+          echo json_encode(1);
+        }else {
+          echo json_encode(0);
+        }
+
+
+      }else {
+        redirect('posts');
+      }
+    }
+
+
+  }//end class

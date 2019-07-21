@@ -20,7 +20,7 @@
           <form action="<?php echo URLROOT; ?>/users/login" method="post">
           <div class="row align-items-center mt-2">
             <div class="col">
-            <input type="email" name="email" class="form-control" id="email" value="<?php if(isset($_COOKIE['friendmii_ue'])) {echo $_COOKIE['friendmii_ue'];} ?>" placeholder="E-mail" >
+            <input type="email" name="email" class="form-control" id="email" value="<?php if(isset($_COOKIE['friendmii_ue'])) {echo $_COOKIE['friendmii_ue'];} ?> <?php echo $data['email']; ?>" placeholder="E-mail" >
             </div>
           </div>
           <span class="text-danger"><?php echo $data['email_err'] ?></span>

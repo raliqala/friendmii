@@ -1,0 +1,135 @@
+.outer-positioning {
+  position: relative;
+  right: 3em !important;
+}
+
+.outer-positioning .form-control-custom {
+  height: 3em;
+  font-size: 18px;
+  width: 32em !important;
+  color: #6e6e6e;
+  border: 1px solid #b3b3b3;
+  border-radius: 20px;
+  background-color: #fff;
+  padding-left: 3.5em;
+}
+
+.post-only .modal textarea {
+  padding-left: 3.5em;
+}
+
+.outer-positioning input:hover {
+  cursor: pointer;
+}
+
+.outer-positioning .post-profile {
+  position: relative;
+  bottom: -.8em;
+  right: -3.8em;
+  z-index: 1000;
+}
+
+.post-only .modal .post-post {
+  position: absolute;
+  top: 1.8em;
+  right: 34.6em;
+  z-index: 1000;
+}
+
+.outer-positioning .post-camera {
+  position: relative;
+  left: -3.5em;
+  top: .8em;
+  z-index: 1000;
+}
+
+.outer-positioning .post-camera a {
+  color: #cecece;
+  font-size: 1.5em;
+}
+
+.outer-positioning .post-profile a img {
+  background-size: 40px 40px;
+  border-radius: 100px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.outer-positioning .post-post a img {
+  background-size: 40px 40px;
+  border-radius: 100px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+/*post view design*/
+.display_posts_only .col-xl-7{
+  top: 1em;
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 58.333333%;
+  flex: 0 0 58.333333%;
+  max-width: 56.333333%;
+  margin-left: -5em;
+}
+
+.image-user a img {
+  background-size: 40px 40px;
+  border-radius: 100px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.image-user .name-position{
+  position: relative;
+  top: -.5em;
+  color: #000;
+}
+
+.image-user .time-position{
+  position: relative;
+  top: -2.3em;
+  left: 4.1em;
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.image-user .a-move{
+  position: relative;
+  top: -2.99em;
+  color: #000;
+  text-decoration: none;
+}
+
+.image-user .dropdown-menu{
+  width: 25%;
+}
+
+.image-user .dropdown-menu a{
+  font-size: 15px;
+}
+
+.display_posts_only .card-text{
+  margin-top: 0;
+  margin-bottom: .1rem;
+}
+
+.feed-body .post-image-style img{
+  width: auto;
+  height: auto;
+  border-radius: 5px;
+  max-width: 100%;
+  max-height: 400px;
+  cursor: pointer;
+}
+
+.hide{
+	display: none;
+}
+
+.comment_like .comment_style li .fa-heart, .fa-heart-o{
+  color: red;
+  cursor: pointer;
+}
+
+
+/*# sourceMappingURL=post.css.map */
