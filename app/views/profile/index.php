@@ -201,12 +201,12 @@
                             <form class="" action="<?php echo URLROOT; ?>/profile/edit/" method="post">
                             <div class="row align-items-center">
                               <div class="col mt-4">
-                                <input type="text" name="firstname" class="form-control" maxlength="32" value="<?php if(isset($pro->job_name)) {echo $pro->firstname;} ?>" required>
+                                <input type="text" name="firstname" class="form-control" maxlength="32" value="<?php if(isset($pro->firstname)) {echo $pro->firstname;} ?>" required>
                               </div>
                             </div>
                             <div class="row align-items-center">
                               <div class="col mt-4">
-                                <input type="text" name="lastname" class="form-control" maxlength="32" value="<?php if(isset($pro->job_name)) {echo $pro->lastname;} ?>" required>
+                                <input type="text" name="lastname" class="form-control" maxlength="32" value="<?php if(isset($pro->firstname)) {echo $pro->lastname;} ?>" required>
                               </div>
                             </div>
                             <div class="row align-items-center">

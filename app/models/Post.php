@@ -190,7 +190,9 @@
     }
 
     public function getComments(){
-      $this->db->query('SELECT * FROM comment
+      $this->db->query('SELECT *,
+                                 users.image AS profile_pic
+                                 FROM comment
                                  INNER JOIN users
                                  ON comment.user_id = users.user_id
                                  WHERE closed = 0 ORDER BY comment.commented_at DESC');
@@ -200,31 +202,31 @@
       return $results;
     }
 
-    public function likePost($data){
-      $date = date('Y-m-d H:i:s');
+   public function likePost($data){
 
-        $this->db->query('SELECT * FROM post WHERE post_id = :post_id');
-        $this->db->bind(':post_id', $data['post_id']);
-        $row = $this->db->single();
-        $n = $row->like_count;
+        if (isset($data['liked'])) {
+          $date = date('Y-m-d H:i:s');
 
-        $this->db->query('INSERT INTO post_like (user_id, post_id, liked_on) VALUES (:user_id, :post_id, :liked_on)');
-        $this->db->bind(':user_id', $data['user_id']);
-        $this->db->bind(':post_id', $data['post_id']);
-        $this->db->bind(':liked_on', $date);
-        if ($this->db->execute()) {
-            $this->db->query("UPDATE post SET like_count = $n+1 WHERE post_id = :post_id");
-            $this->db->bind(':post_id', $data['post_id']);
-            $this->db->execute();
-            return true;
-        }else {
-          return false;
+          $this->db->query('SELECT * FROM post WHERE post_id = :post_id');
+          $this->db->bind(':post_id', $data['post_id']);
+          $row = $this->db->single();
+          $n = $row->like_count;
+
+          $this->db->query('INSERT INTO post_like (user_id, post_id, liked_on) VALUES (:user_id, :post_id, :liked_on)');
+          $this->db->bind(':user_id', $data['user_id']);
+          $this->db->bind(':post_id', $data['post_id']);
+          $this->db->bind(':liked_on', $date);
+          $this->db->execute();
+          $this->db->query("UPDATE post SET like_count = $n+1 WHERE post_id = :post_id");
+          $this->db->bind(':post_id', $data['post_id']);
+          $this->db->execute();
         }
 
     }
 
-    public function unlikePost($data){
-
+    public function unlikePost($data)
+    {
+      if (isset($data['unliked'])) {
         $this->db->query('SELECT * FROM post WHERE post_id = :post_id');
         $this->db->bind(':post_id', $data['post_id']);
         $row = $this->db->single();
@@ -233,16 +235,13 @@
         $this->db->query('DELETE FROM post_like WHERE user_id = :user_id AND post_id = :post_id');
         $this->db->bind(':user_id', $data['user_id']);
         $this->db->bind(':post_id', $data['post_id']);
+        $this->db->execute();
 
-        if ($this->db->execute()) {
-            $this->db->query("UPDATE post SET like_count = $n-1 WHERE post_id = :post_id");
-            $this->db->bind(':post_id', $data['post_id']);
-            $this->db->execute();
-            return true;
-        }else {
-          return false;
-        }
-
+        $this->db->query("UPDATE post SET like_count = $n-1 WHERE post_id = :post_id");
+        $this->db->bind(':post_id', $data['post_id']);
+        $this->db->execute();
+      }
     }
+
 
   }//end class

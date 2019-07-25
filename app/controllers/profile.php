@@ -11,9 +11,9 @@ class Profile extends Controller{
           redirect('users/login');
         }
 
-        if (isset($_GET['username']) === true && empty($_GET['username']) === false) {
+        if (isset($_GET['u']) === true && empty($_GET['u']) === false) {
 
-          $username = trim($_GET['username']);
+          $username = trim($_GET['u']);
           $profileId = $this->userModel->getUserIDById($username);
           //die(print_r($profileId,true));
           $profileData = $this->userModel->userData($profileId);

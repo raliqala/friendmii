@@ -133,7 +133,7 @@
    <!-- Collapsible content -->
    <ul class="navbar-nav ml-auto nav-flex-icons">
       <li class="nav-item">
-        <a href="<?php echo URLROOT; ?>/profile?username=<?php echo $_SESSION['name']; ?>" class="nav-link waves-effect waves-light">
+        <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $_SESSION['username']; ?>" class="nav-link waves-effect waves-light">
           <?php echo $_SESSION['name']; ?>
         </a>
       </li>
@@ -148,7 +148,7 @@
         </a>
         <div class="dropdown-menu dropdown-menu-left dropdown-default"
           aria-labelledby="navbarDropdownMenuLink-55">
-          <a class="dropdown-item" href="<?php echo URLROOT; ?>/profile?username=<?php echo $_SESSION['name']; ?>">Signed in as <strong><?php echo $_SESSION['name'];?></strong></a>
+          <a class="dropdown-item" href="<?php echo URLROOT; ?>/profile?u=<?php echo $_SESSION['username']; ?>">Signed in as <strong><?php echo $_SESSION['name'];?></strong></a>
           <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Change theme</a>
             <a class="dropdown-item" href="#"><i class="fa fa-info-circle" aria-hidden="true"></i> Terms</a>

@@ -1,11 +1,11 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
-
+<script src="https://kit.fontawesome.com/1b5939c109.js"></script>
   <div class="container">
     <div class="row justify-content-center">
       <div class="" role="alert" style="position: relative; bottom: -2em; left: -1em; font-size: 1em;">
         <?php flash('error-post'); ?>
         <?php flash('report_message'); ?>
-        
+
       </div>
     </div>
     <!-- <div class="row pull-left ml-auto">
@@ -30,7 +30,7 @@
             <div class="outer-positioning">
               <div class="row align-items-center">
                 <div class="post-profile">
-                  <a href="<?php echo URLROOT; ?>/profile?username=<?php echo $_SESSION['name']; ?>">
+                  <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $_SESSION['username']; ?>">
                     <?php if (!empty($_SESSION['profile_pic'])): ?>
                       <img src="<?php echo URLROOT;?>/<?php echo $_SESSION['profile_pic']; ?>" width="40" height="40" alt="profile pic">
                     <?php else: ?>
@@ -64,7 +64,7 @@
                               <form class="" form="postForm" action="<?php echo URLROOT; ?>/posts/post/" onsubmit="return TpValidate()" enctype="multipart/form-data" method="post">
                               <div class="row align-items-center">
                                 <div class="post-post">
-                                  <a href="<?php echo URLROOT; ?>/profile?username=<?php echo $_SESSION['name']; ?>">
+                                  <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $_SESSION['username']; ?>">
                                     <?php if (!empty($_SESSION['profile_pic'])): ?>
                                       <img src="<?php echo URLROOT;?>/<?php echo $_SESSION['profile_pic']; ?>" width="40" height="40" alt="profile pic">
                                     <?php else: ?>
@@ -122,14 +122,14 @@
                   <div class="card card-body mb-3">
                       <h4 class="card-title"></h4>
                       <div class="mb-3 image-user" style="margin-top: -1em;">
-                        <a href="<?php echo URLROOT; ?>/profile?username=<?php echo $post->firstname; ?>">
+                        <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $post->username; ?>">
                           <?php if (!empty($post->profile_pic)): ?>
                             <img src="<?php echo URLROOT;?>/<?php echo $post->profile_pic; ?>" width="40" height="40" alt="profile pic">
                           <?php else: ?>
                             <img src="<?php echo URLROOT;?>/public/assets/blank-profile.png" width="40" height="40" alt="profile pic">
                           <?php endif; ?>
                         </a>
-                        <a href="<?php echo URLROOT; ?>/profile?username=<?php echo $post->firstname; ?>" class="name-position"><?php echo $post->firstname; ?></a><br>
+                        <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $post->username; ?>" class="name-position"><?php echo $post->firstname; ?> <span style="color: gray; font-size: 12px;"> | @<?php echo $post->username; ?></span></a><br>
                         <a href="" class="time-position"><?php echo get_time_ago($post->posted_at); ?></a>
 
                         <a href="javascript:void(0)" class="a-move pull-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-h fa-lg"></i></a>
@@ -264,38 +264,57 @@
                      </div>
                      <div class="comment_like">
                        <ul class="comment_style">
-                         <li>
-
+                         <li class="likes_only">
                              <?php if (UserLikedOrNot($_SESSION['user_id'],$post->post_id)): ?>
-                               <span class="unlike fa fa-heart" data-id="<?php echo $post->post_id; ?>"></span>
-                               <span class="like hide fa fa-heart-o" data-id="<?php echo $post->post_id; ?>"></span>
+                               <span class="unlike fa fa-heart" onclick="return removeLikes('<?php echo $post->post_id; ?>')"></span>
+                               <span class="like hide fa fa-heart-o" onclick="return addLikes('<?php echo $post->post_id; ?>')"></span>
                              <?php else: ?>
-                               <span class="like fa fa-heart-o" data-id="<?php echo $post->post_id; ?>"></span>
-						                   <span class="unlike hide fa fa-heart" data-id="<?php echo $post->post_id; ?>"></span>
+                               <span class="like fa fa-heart-o" onclick="return addLikes('<?php echo $post->post_id; ?>')"></span>
+						                   <span class="unlike hide fa fa-heart" onclick="return removeLikes('<?php echo $post->post_id; ?>')"></span>
                              <?php endif; ?>
 
-                           <span class="likes_count"><?php echo $post->like_count; ?></span>
+                           <span class="likes_count"><?php echo likesOrLike($post->like_count); ?></span>
                          </li>
-                         <li>
-                           <button  class="comment-btn"><i class="fa fa-commenting fa-comment"></i></button>
+                         <li class="comments_only">
+                           <span  class="comment-btn"><i class="fas fa-comment-alt"></i> Comments <span>0</span></span>
                          </li>
                        </ul>
-
-                       <div class="comment_post">
-                         <textarea dir="auto" style="resize: none;" class="comment_field" id="comment_text_<?php echo $post->post_id; ?>" autocomplete="off" placeholder="leave a comment.."></textarea>
-                         <a href="javascript:void(0)" onclick="return commentodb('<?php echo $post->post_id; ?>');">Send</a>
-                       </div>
-                       <!-- <div class="disply_comments">
-                         <p>
-                           <?php foreach ($data['comments'] as $postCom): ?>
-                             <?php if ($post->post_id == $postCom->post_id): ?>
-                               <?php echo getPostLink(nl2br($postCom->comment)); ?>
-                             <?php else: ?>
-
-                             <?php endif; ?>
-                           <?php endforeach; ?>
-                         </p>
-                       </div> -->
+                        <div class="">
+                          <div class="comment_post">
+                            <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $post->username; ?>" class="user_comment_pic">
+                              <?php if (!empty($post->profile_pic)): ?>
+                                <img src="<?php echo URLROOT;?>/<?php echo $post->profile_pic; ?>" width="40" height="40" alt="profile pic">
+                              <?php else: ?>
+                                <img src="<?php echo URLROOT;?>/public/assets/blank-profile.png" width="40" height="40" alt="profile pic">
+                              <?php endif; ?>
+                            </a>
+                            <textarea dir="auto" style="resize: none;" class="comment_field" id="comment_text_<?php echo $post->post_id; ?>" autocomplete="off" placeholder="leave a comment.."></textarea>
+                            <a href="javascript:void(0)" class="send_post" onclick="return commentodb('<?php echo $post->post_id; ?>');">
+                              <img src="<?php echo URLROOT;?>/public/assets/send-button.png" width="30" height="30" alt="Comment">
+                            </a>
+                          </div>
+                          <?php foreach ($data['comments'] as $postCom): ?>
+                           <div class="disply_comments">
+                            <?php if ($post->post_id == $postCom->post_id): ?>
+                              <div class="comment_view_holder">
+                                <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $postCom->username; ?>" class="commented_user">
+                                  <?php if (!empty($post->profile_pic)): ?>
+                                    <img src="<?php echo URLROOT;?>/<?php echo $postCom->profile_pic; ?>" width="40" height="40" alt="profile pic">
+                                  <?php else: ?>
+                                    <img src="<?php echo URLROOT;?>/public/assets/blank-profile.png" width="40" height="40" alt="profile pic">
+                                  <?php endif; ?>
+                                </a>
+                                  <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $postCom->username; ?>" class="commented_username"><?php echo $postCom->firstname; ?></a>
+                                <div class="comment_holder">
+                                  <p>
+                                    <?php echo $postCom->comment; ?>
+                                  </p>
+                                </div>
+                              </div>
+                            <?php endif; ?>
+                           </div>
+                          <?php endforeach; ?>
+                        </div>
                      </div>
                   </div>
               </div>
@@ -431,46 +450,45 @@
           }
       }
 
-      $(document).ready(function(){
-      		// when the user clicks on like
-      		$('.like').on('click', function(){
-      			var postid = $(this).data('id');
-            var comment_text = $.trim($('#comment_text_'+pid).val());
-      			    $post = $(this);
+        function addLikes(postid){
+          $post = $(this);
+          $.ajax({
+            url: '<?php echo URLROOT; ?>/posts/AddLike/',
+            type: 'post',
+            data: {
+              'liked' : 1,
+              'postid': postid
+            },
+            success: function(response){
+              alert('Added like');
+              $post.addClass('hide');
+              $post.siblings().removeClass('hide');
+              setTimeout(function(){
+                location.reload();
+              });
+            }
+          });
+        }
 
-      			$.ajax({
-      				url: '<?php echo URLROOT; ?>/posts/AddLike/',
-      				type: 'post',
-      				data: {
-      					'postid': postid
-      				},
-      				success: function(response){
-                  $('.likes_count').text(response);
-        					$post.addClass('hide');
-        					$post.siblings().removeClass('hide');
-      				}
-      			});
-      		});
-
-      		// when the user clicks on unlike
-      		$('.unlike').on('click', function(){
-      			var postid = $(this).data('id');
-      		    $post = $(this);
-
-      			$.ajax({
-      				url: '<?php echo URLROOT; ?>/posts/removeLike/',
-      				type: 'post',
-      				data: {
-      					'postid': postid
-      				},
-      				success: function(response){
-      					$('.likes_count').text(response);
-      					$post.addClass('hide');
-      					$post.siblings().removeClass('hide');
-      				}
-      			});
-      		});
-      	});
+        function removeLikes(postid){
+          $post = $(this);
+          $.ajax({
+            url: '<?php echo URLROOT; ?>/posts/removeLike/',
+            type: 'post',
+            data: {
+              'unliked' : 1,
+              'postid': postid
+            },
+            success: function(response){
+              alert('Removed like');
+              $post.addClass('hide');
+              $post.siblings().removeClass('hide');
+              setTimeout(function(){
+                location.reload();
+              });
+            }
+          });
+        }
 
     </script>
 

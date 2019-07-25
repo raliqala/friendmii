@@ -430,11 +430,15 @@
       $_SESSION['email'] = $user->email;
       $_SESSION['name'] = $user->firstname;
       $_SESSION['profile_pic'] = $user->image;
+      $_SESSION['username'] = $user->username;
       redirect('posts');
     }
 
     // Logout & Destroy Session
     public function logout(){
+      if ($this->userModel->lastLogOut($_SESSION['user_id'])) {
+
+      }
       unset($_SESSION['user_id']);
       unset($_SESSION['email']);
       unset($_SESSION['name']);

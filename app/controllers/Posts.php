@@ -41,7 +41,7 @@
         if(!$_SESSION['user_id']){
           redirect('users/login');
         }
-        $uname = $_SESSION['name'];
+        
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
             //Sanitize post array
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -386,6 +386,7 @@
         $data = [
           'user_id' => trim($_SESSION['user_id']),
           'post_id' => trim($_POST['postid']),
+          'liked'   => trim($_POST['liked'])
         ];
 
         if ($this->postModel->likePost($data)) {
@@ -407,8 +408,9 @@
         $data = [
           'user_id' => trim($_SESSION['user_id']),
           'post_id' => trim($_POST['postid']),
+          'unliked'   => trim($_POST['unliked'])
         ];
-        die(print_r($this->postModel->unlikePost($data),true));
+
         if ($this->postModel->unlikePost($data)) {
           echo json_encode(1);
         }else {

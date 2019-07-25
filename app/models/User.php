@@ -10,6 +10,8 @@
 
     //register
     public function register($data){
+      //die(print_r(random_username($data['firstname']),true));
+      $username = random_username($data['firstname']);
       $validation_code = token_generator();
       $date = date('Y-m-d H:i:s');
       //$validation_code = md5($data['name'] + microtime());
@@ -18,9 +20,10 @@
       //$nameFirstChar = $firstname[0];
       //$target_path = createAvatarImage($nameFirstChar);
 
-      $this->db->query('INSERT INTO users(firstname, lastname, email, dob, gender, address, validation_code, password, is_activated, acount_created_at, deleted) VALUES (:firstname, :lastname, :email, :dob, :gender, :address, :validation_code, :password, 0, :acount_created_at, 0)');
+      $this->db->query('INSERT INTO users(firstname, lastname, username, email, dob, gender, address, validation_code, password, is_activated, acount_created_at, deleted) VALUES (:firstname, :lastname, :username, :email, :dob, :gender, :address, :validation_code, :password, 0, :acount_created_at, 0)');
       $this->db->bind(':firstname', $data['firstname']);
       $this->db->bind(':lastname', $data['lastname']);
+      $this->db->bind(':username', $username);
       $this->db->bind(':email', $data['email']);
       $this->db->bind(':dob', $data['dob']);
       $this->db->bind(':gender', $data['gender']);
@@ -190,10 +193,18 @@
       return $row;
     }
 
+    public function lastLogOut($uid){
+      $date = date('Y-m-d H:i:s');
+      $this->db->query('UPDATE users SET logout_time = :logout_time WHERE user_id = :user_id');
+      $this->db->bind(':user_id', $uid);
+      $this->db->bind(':logout_time', $date);
+      $this->db->execute();
+    }
+
     public function getUserIDById($username){
       //die(print_r($username,true));
-      $this->db->query("SELECT user_id FROM users WHERE firstname = :firstname");
-      $this->db->bind(':firstname', $username);
+      $this->db->query("SELECT user_id FROM users WHERE username = :username");
+      $this->db->bind(':username', $username);
 
       $row = $this->db->single();
       $userid = $row->user_id;

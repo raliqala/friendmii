@@ -1,6 +1,7 @@
 .outer-positioning {
   position: relative;
   right: 3em !important;
+  padding-right: 3em !important;
 }
 
 .outer-positioning .form-control-custom {
@@ -69,7 +70,7 @@
   -ms-flex: 0 0 58.333333%;
   flex: 0 0 58.333333%;
   max-width: 56.333333%;
-  margin-left: -5em;
+  margin-right: 8em !important;
 }
 
 .image-user a img {
@@ -109,27 +110,95 @@
 }
 
 .display_posts_only .card-text{
-  margin-top: 0;
-  margin-bottom: .1rem;
+  margin-top: -1em;
+  margin-bottom: .2rem;
+}
+
+.feed-body .post-image-style{
+  margin-top: -em;
 }
 
 .feed-body .post-image-style img{
   width: auto;
   height: auto;
-  border-radius: 5px;
+  border-radius: 3px;
   max-width: 100%;
   max-height: 400px;
   cursor: pointer;
 }
 
-.hide{
+.comment_like .comment_style li .hide{
 	display: none;
 }
 
 .comment_like .comment_style li .fa-heart, .fa-heart-o{
   color: red;
+  font-size: 17px;
   cursor: pointer;
 }
 
+.comment_like .comment_style li .fa-comment-alt{
+  color: #007bff;
+  font-size: 17px;
+  cursor: pointer;
+}
 
-/*# sourceMappingURL=post.css.map */
+.comment_like{
+  margin-top: .5em;
+  margin-bottom: -1.2em;
+  border: 1px solid  #dedede;
+  border-radius: 5px;
+  border-bottom: none;
+}
+
+.comment_like .comment_style{
+  position: relative;
+  left: -2em;
+  top: .5em;
+}
+
+.comment_like .comment_style{
+  display: flex;
+}
+
+.comment_like .comment_style li{
+  list-style: none;
+  margin-right: 1em;
+}
+
+.comment_like .comments_only .comment-btn{
+  cursor: pointer;
+}
+
+.comment_like .comment_post{
+  position: relative;
+  left: .5em;
+  top: .3em;
+}
+
+.comment_like .comment_post textarea{
+  height: 2.4em;
+  width: 438px;
+  border-radius: 6px;
+}
+
+.comment_like .comment_post .user_comment_pic{
+  position: relative;
+  top: -.9em;
+}
+
+.comment_like .comment_post .user_comment_pic img{
+  background-size: 40px 40px;
+  border-radius: 100px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.comment_like .comment_post .send_post{
+  position: relative;
+  top: -.88em;
+}
+
+.comment_like .disply_comments{
+  
+}
