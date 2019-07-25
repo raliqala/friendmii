@@ -297,17 +297,17 @@
                            <div class="disply_comments">
                             <?php if ($post->post_id == $postCom->post_id): ?>
                               <div class="comment_view_holder">
-                                <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $postCom->username; ?>" class="commented_user">
-                                  <?php if (!empty($post->profile_pic)): ?>
-                                    <img src="<?php echo URLROOT;?>/<?php echo $postCom->profile_pic; ?>" width="40" height="40" alt="profile pic">
+                                <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $postCom->username; ?>" class="commented_user_pic">
+                                  <?php if (!empty($postCom->profile_pic)): ?>
+                                    <img src="<?php echo URLROOT;?>/<?php echo $postCom->profile_pic; ?>" width="35" height="35" alt="profile pic">
                                   <?php else: ?>
-                                    <img src="<?php echo URLROOT;?>/public/assets/blank-profile.png" width="40" height="40" alt="profile pic">
+                                    <img src="<?php echo URLROOT;?>/public/assets/blank-profile.png" width="35" height="35" alt="profile pic">
                                   <?php endif; ?>
                                 </a>
-                                  <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $postCom->username; ?>" class="commented_username"><?php echo $postCom->firstname; ?></a>
+                                  <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $postCom->username; ?>" class="commented_username"><?php echo $postCom->firstname; ?> > commented</a>
                                 <div class="comment_holder">
                                   <p>
-                                    <?php echo $postCom->comment; ?>
+                                    <?php echo getPostLink(nl2br($postCom->comment)); ?>
                                   </p>
                                 </div>
                               </div>

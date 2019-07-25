@@ -74,12 +74,12 @@ class Profile extends Controller{
 
 
         if(empty($data['firstname']) && empty($data['lastname']) && empty($data['email']) && empty($data['address']) && empty($data['gender']) && empty($data['hobby'])){
-            redirect('profile?username='.$_SESSION['name']);
+            redirect('profile?u='.$_SESSION['username']);
          }
          else{
             if($this->userModel->updateProfile($data)){
               flash('profile_updated', 'Profile updated');
-              redirect('profile?username='.$_SESSION['name']);
+              redirect('profile?u='.$_SESSION['username']);
             }else{
               echo '<script language="javascript">';
               echo 'alert("Sorry something went wrong")';  //not showing an alert box.
@@ -121,12 +121,12 @@ class Profile extends Controller{
 
        // check if inputs are empty then conn
        if(empty($data['music']) && empty($data['movies']) && empty($data['books']) && empty($data['animals'])){
-           redirect('profile?username='.$_SESSION['name']);
+           redirect('profile?u='.$_SESSION['username']);
         }
         else{
            if($this->userModel->updateFavourite($data)){
              flash('profile_updated', 'Profile updated');
-             redirect('profile?username='.$_SESSION['name']);
+             redirect('profile?u='.$_SESSION['username']);
            }else{
              echo '<script language="javascript">';
              echo 'alert("Sorry something went wrong")';  //not showing an alert box.
@@ -182,15 +182,15 @@ class Profile extends Controller{
         if(move_uploaded_file( $_FILES['image']['tmp_name'], $path)) {
           if($this->userModel->updatePro_picture($data)) {
             flash('profile_updated', 'Profile updated');
-            redirect('profile?username='.$_SESSION['name']);
+            redirect('profile?u='.$_SESSION['username']);
           }else {
             flash('error-profile', '<span class="text-danger">Sorry, something went wrong.</span>');
-            redirect('profile?username='.$_SESSION['name']);
+            redirect('profile?u='.$_SESSION['username']);
           }
         }
       }else{
         flash('error-profile', '<span class="text-danger">Sorry, only JPG, JPEG, PNG & GIF  files are allowed AND file size must be less than or equals 2mb.</span>');
-        redirect('profile?username='.$_SESSION['name']);
+        redirect('profile?u='.$_SESSION['username']);
       }
 
   }else{
@@ -244,12 +244,12 @@ class Profile extends Controller{
               redirect('profile?username='.$_SESSION['name']);
             }else {
               flash('error-profile', '<span class="text-danger">Sorry, something went wrong.</span>');
-              redirect('profile?username='.$_SESSION['name']);
+              redirect('profile?u='.$_SESSION['username']);
             }
           }
         }else{
           flash('error-profile', '<span class="text-danger">Sorry, only JPG, JPEG, PNG & GIF  files are allowed AND file size must be less than or equals 2mb.</span>');
-          redirect('profile?username='.$_SESSION['name']);
+          redirect('profile?u='.$_SESSION['username']);
         }
 
     }else{
@@ -283,12 +283,12 @@ class Profile extends Controller{
 
 
         if(empty($data['job']) && empty($data['position']) && empty($data['bio'])){
-            redirect('profile?username='.$_SESSION['name']);
+            redirect('profile?u='.$_SESSION['username']);
          }
          else{
             if($this->userModel->updateBio($data)){
               flash('profile_updated', 'Profile updated');
-              redirect('profile?username='.$_SESSION['name']);
+              redirect('profile?u='.$_SESSION['username']);
             }else{
               echo '<script language="javascript">';
               echo 'alert("Sorry something went wrong")';  //not showing an alert box.

@@ -179,7 +179,9 @@
 .comment_like .comment_post textarea{
   height: 2.4em;
   width: 438px;
+  border: 1px solid #dedede;
   border-radius: 6px;
+  color: #575757;
 }
 
 .comment_like .comment_post .user_comment_pic{
@@ -199,6 +201,34 @@
   top: -.88em;
 }
 
-.comment_like .disply_comments{
-  
+.comment_like .disply_comments .comment_view_holder .commented_user_pic{
+  position: relative;
+  left: .7em;
+}
+
+.comment_like .disply_comments .comment_view_holder .commented_username{
+  position: relative;
+  left: .7em;
+  top: -.3em;
+  color: #007bff;
+  font-size: 14px;
+}
+
+.comment_like .disply_comments .comment_view_holder .commented_user_pic img{
+  background-size: 35px 35px;
+  border-radius: 100px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.comment_like .disply_comments .comment_holder p{
+  position: relative;
+  color: #575757;
+  top: -.5em;
+  left: 3.2em;
+  border: 1px solid #dedede9e;
+  width: 470px;
+  height: auto;
+  padding: 3px;
+  border-radius: 5px;
 }
