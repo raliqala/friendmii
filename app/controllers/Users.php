@@ -423,6 +423,18 @@
         $this->view('users/code', $data);
       }
     }
+
+    //online or offline user
+    public function onlineOfline(){
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $data = [
+              'status' => trim($_POST['st']),
+        ];
+        if ($this->userModel->offlineStatus($data)) {}
+      }
+    }
+
     // Create Session With User Info
     public function createUserSession($user){
       $img = $this->userModel->getProfile();

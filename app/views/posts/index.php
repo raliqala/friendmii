@@ -273,22 +273,22 @@
 						                   <span class="unlike hide fa fa-heart" onclick="return removeLikes('<?php echo $post->post_id; ?>')"></span>
                              <?php endif; ?>
 
-                           <span class="likes_count"><?php echo likesOrLike($post->like_count); ?></span>
+                           <span class="likes_count" style="color: #575757;"><?php echo likesOrLike($post->like_count); ?></span>
                          </li>
                          <li class="comments_only">
-                           <span  class="comment-btn"><i class="fas fa-comment-alt"></i> Comments <span>0</span></span>
+                           <span  class="comment-btn"><i class="fas fa-comment-alt"></i> <span style="color: #575757;">Comments 0</span></span>
                          </li>
                        </ul>
                         <div class="">
                           <div class="comment_post">
-                            <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $post->username; ?>" class="user_comment_pic">
-                              <?php if (!empty($post->profile_pic)): ?>
-                                <img src="<?php echo URLROOT;?>/<?php echo $post->profile_pic; ?>" width="40" height="40" alt="profile pic">
+                            <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $_SESSION['username']; ?>" class="user_comment_pic">
+                              <?php if (!empty($_SESSION['profile_pic'])): ?>
+                                <img src="<?php echo URLROOT;?>/<?php echo $_SESSION['profile_pic']; ?>" width="40" height="40" alt="profile pic">
                               <?php else: ?>
                                 <img src="<?php echo URLROOT;?>/public/assets/blank-profile.png" width="40" height="40" alt="profile pic">
                               <?php endif; ?>
                             </a>
-                            <textarea dir="auto" style="resize: none;" class="comment_field" id="comment_text_<?php echo $post->post_id; ?>" autocomplete="off" placeholder="leave a comment.."></textarea>
+                            <textarea dir="auto" style="resize: none;" class="comment_field" id="comment_text_<?php echo $post->post_id; ?>" autocomplete="off" placeholder="leave a comment..."></textarea>
                             <a href="javascript:void(0)" class="send_post" onclick="return commentodb('<?php echo $post->post_id; ?>');">
                               <img src="<?php echo URLROOT;?>/public/assets/send-button.png" width="30" height="30" alt="Comment">
                             </a>
@@ -304,7 +304,7 @@
                                     <img src="<?php echo URLROOT;?>/public/assets/blank-profile.png" width="35" height="35" alt="profile pic">
                                   <?php endif; ?>
                                 </a>
-                                  <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $postCom->username; ?>" class="commented_username"><?php echo $postCom->firstname; ?> > commented</a>
+                                  <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $postCom->username; ?>" class="commented_username"><?php echo $postCom->firstname; ?></a>
                                 <div class="comment_holder">
                                   <p>
                                     <?php echo getPostLink(nl2br($postCom->comment)); ?>

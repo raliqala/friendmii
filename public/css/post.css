@@ -112,6 +112,7 @@
 .display_posts_only .card-text{
   margin-top: -1em;
   margin-bottom: .2rem;
+  color: #575757;
 }
 
 .feed-body .post-image-style{

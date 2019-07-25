@@ -501,5 +501,17 @@
 
    }
 
+   public function offlineStatus($data){
+     $uid = $_SESSION['user_id'];
+     $this->db->query('UPDATE users SET online = :online WHERE user_id = :user_id');
+     $this->db->bind(':online', $data['status']);
+     $this->db->bind(':user_id', $uid);
+      if($this->db->execute()){
+        return true;
+      }else{
+        return false;
+      }
+   }
 
-  }
+
+ }//end model

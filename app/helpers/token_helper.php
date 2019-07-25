@@ -28,12 +28,6 @@ function UserLikedOrNot($uid,$pid){
 
 }
 
-// function random_username($user_name){
-//  $new_name = $user_name.mt_rand(0,10000);
-//  check_user_name($new_name,$user_name);
-//  return $new_name;
-// }
-
 function random_username($string_name)
   {
     // echo $string_name."".$rand_no;
@@ -60,17 +54,30 @@ function username_exist_in_database($username){
   $db->query('SELECT * FROM users WHERE username = :username');
   $db->bind(':username', $username);
   $row = $db->resultset();
- if($db->rowCount($row) > 0)
- {
-  return false;
- }
- else
- {
-  return true;
- }
+   if($db->rowCount($row) > 0){
+    return false;
+   }
+   else{
+    return true;
+   }
 }
 
+function onlineOrOffline($status){
+  $db = new Database(true);
+  $uid = $_SESSION['user_id'];
+  $db->query('UPDATE users SET online = :online WHERE user_id = :user_id');
+  $db->bind(':online', $status);
+  $db->bind(':user_id', $uid);
+   if($db->execute()){
+     return true;
+   }else{
+     return false;
+   }
+}
+
+
 // function sessionX(){
+//     $user = new Users(true);
 //     $logLength = 1800; # time in seconds :: 1800 = 30 minutes
 //     $ctime = strtotime("now"); # Create a time from a string
 //     # If no session time is created, create one

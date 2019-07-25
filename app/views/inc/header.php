@@ -21,7 +21,23 @@
   <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css"/>
   <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 
-
+<?php
+//logged in track, inactivity track
+  if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
+    $online_status = 1;
+    onlineOrOffline($online_status);
+  }
+ ?>
+ <script type="text/javascript">
+   window.onbeforeunload = function(){
+       var st = "0";
+       $.ajax({
+           type: "POST",
+           url: "<?php echo URLROOT; ?>/users/onlineOfline/",
+           data: {'st':st}
+       });
+   }
+ </script>
   <title><?php echo SITENAME; ?></title>
 </head>
 <body class="fixed-sn black-skin">
