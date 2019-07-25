@@ -4,6 +4,29 @@
   .pac-container {
       z-index: 1051 !important;
   }
+
+  .profile-image .inner-image .status_online{
+    height: 20px;
+    width: 20px;
+    background: #4CAF50;
+    position: absolute;
+    border-radius: 20px;
+    border: 2px solid #fff;
+    top: 8.78em;
+    left: 4.2em;
+  }
+
+  .profile-image .inner-image .status_offline{
+    height: 20px;
+    width: 20px;
+    background: #a0a0a0;
+    position: absolute;
+    border-radius: 20px;
+    border: 2px solid #fff;
+    top: 8.78em;
+    left: 4.2em;
+  }
+
   </style>
   <div class="container">
     <?php foreach($data['profileData'] as $pro) : ?>
@@ -15,7 +38,6 @@
         <div class="jumbotron jumbotron-fluid jumbo-style" style="height: 13em;background-image:url('<?php if(isset($pro->cover_image)) {echo $pro->cover_image;} ?>'); background-size: cover; background-repeat: no-repeat; background-position: center; background-attachment: static;">
           <div class="container">
               <?php if ($_SESSION['user_id'] != $pro->user_id): ?>
-
               <?php else: ?>
                 <a href="javascript:void(0)" class="d-flex justify-content-start"><i class="fa fa-camera" aria-hidden="true" data-toggle="modal" data-target="#modalSubscriptionForm1"></i></a>
               <?php endif; ?>
@@ -67,6 +89,15 @@
           <?php endif; ?>
 
         <div class="inner-image">
+          <?php if ($pro->user_id == $_SESSION['user_id'] && $pro->username == $_SESSION['username']): ?>
+            <span class="status_online"></span>
+          <?php else: ?>
+            <?php if ($pro->online == 1): ?>
+              <span class="status_online" title="<?php echo "$pro->firstname is online"; ?>"></span>
+            <?php else: ?>
+              <span class="status_offline" title="<?php echo "$pro->firstname is offline"; ?>"></span>
+            <?php endif; ?>
+          <?php endif; ?>
           <?php if (!empty($pro->image)): ?>
             <img src='<?php echo $pro->image; ?>' class="rounded" alt='profile'>
           <?php else: ?>
