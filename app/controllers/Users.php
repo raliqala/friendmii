@@ -448,9 +448,7 @@
 
     // Logout & Destroy Session
     public function logout(){
-      if ($this->userModel->lastLogOut($_SESSION['user_id'])) {
-
-      }
+      if ($this->userModel->lastLogOut($_SESSION['user_id'])) {}
       unset($_SESSION['user_id']);
       unset($_SESSION['email']);
       unset($_SESSION['name']);

@@ -195,7 +195,7 @@
 
     public function lastLogOut($uid){
       $date = date('Y-m-d H:i:s');
-      $this->db->query('UPDATE users SET logout_time = :logout_time WHERE user_id = :user_id');
+      $this->db->query('UPDATE users SET logout_time = :logout_time, online = 0 WHERE user_id = :user_id');
       $this->db->bind(':user_id', $uid);
       $this->db->bind(':logout_time', $date);
       $this->db->execute();

@@ -49,6 +49,7 @@ navigation: c4 blue-gradient
 
 body{
   padding-top: 60px;
+  font-family: var(--font-family-sans-serif);
 }
 
 /* .container .row .jumbo-style{

@@ -241,7 +241,7 @@ class Profile extends Controller{
           if(move_uploaded_file( $_FILES['image']['tmp_name'], $path)) {
             if($this->userModel->updatePro_cover($data)) {
               flash('profile_updated', 'Profile updated');
-              redirect('profile?username='.$_SESSION['name']);
+              redirect('profile?u='.$_SESSION['username']);
             }else {
               flash('error-profile', '<span class="text-danger">Sorry, something went wrong.</span>');
               redirect('profile?u='.$_SESSION['username']);
