@@ -111,7 +111,7 @@
           </div>
         </section>
 
-        <div class="mt-4">
+        <div class="mt-3">
         </div>
 
         <?php foreach($data['posts'] as $post) :?>
@@ -132,7 +132,7 @@
                         <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $post->username; ?>" class="name-position"><?php echo $post->firstname; ?> <span style="color: gray; font-size: 12px;"> | @<?php echo $post->username; ?></span></a><br>
                         <a href="" class="time-position"><?php echo get_time_ago($post->posted_at); ?></a>
 
-                        <a href="javascript:void(0)" class="a-move pull-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-h fa-lg"></i></a>
+                        <a href="javascript:void(0)" class="a-move pull-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></a>
                         <div class="dropdown-menu">
                           <?php if ($_SESSION['user_id'] != $post->user_id): ?>
                             <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#reportPostModal<?php echo $post->post_id;?>">
@@ -276,10 +276,11 @@
                            <span class="likes_count" style="color: #575757;"><?php echo likesOrLike($post->like_count); ?></span>
                          </li>
                          <li class="comments_only">
-                           <span  class="comment-btn"><i class="fas fa-comment-alt"></i> <span style="color: #575757;">Comments 0</span></span>
+                           <span  class="comment-btn" onclick="showComments()"><i class="fas fa-comment-alt"></i> <span style="color: #575757;">Comments 0</span></span>
                          </li>
                        </ul>
-                        <div class="">
+                       <?php foreach ($data['comments'] as $postCom): ?>
+                        <div id="show_hide_comments" style="display: none;">
                           <div class="comment_post">
                             <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $_SESSION['username']; ?>" class="user_comment_pic">
                               <?php if (!empty($_SESSION['profile_pic'])): ?>
@@ -293,7 +294,7 @@
                               <img src="<?php echo URLROOT;?>/public/assets/send-button.png" width="30" height="30" alt="Comment">
                             </a>
                           </div>
-                          <?php foreach ($data['comments'] as $postCom): ?>
+
                            <div class="disply_comments">
                             <?php if ($post->post_id == $postCom->post_id): ?>
                               <div class="comment_view_holder">
@@ -304,8 +305,27 @@
                                     <img src="<?php echo URLROOT;?>/public/assets/blank-profile.png" width="35" height="35" alt="profile pic">
                                   <?php endif; ?>
                                 </a>
-                                  <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $postCom->username; ?>" class="commented_username"><?php echo $postCom->firstname; ?></a>
+                                <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $postCom->username; ?>" class="commented_username"><?php echo $postCom->firstname; ?></a>
                                 <div class="comment_holder">
+                                  <a href="javascript:void(0)" class="a-move-comment pull-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></a>
+                                  <div class="dropdown-menu">
+                                    <?php if ($_SESSION['user_id'] != $post->user_id): ?>
+                                      <a class="dropdown-item" href="javascript:void(0)" data-target="<?php echo $postCom->comment_id;?>">
+                                        <i class="fa fa-bug"></i> Report comment
+                                      </a>
+                                    <?php else: ?>
+                                      <a class="dropdown-item" href="javascript:void(0)" data-cid="<?php echo $postCom->comment_id;?>">
+                                        <i class="fa fa-pencil"></i> Edit comment
+                                      </a>
+                                      <a class="dropdown-item" href="javascript:void(0)" data-cid="<?php echo $postCom->comment_id;?>">
+                                        <i class="fa fa-trash" aria-hidden='true'></i> Delete comment
+                                      </a>
+                                      <div class="dropdown-divider"></div>
+                                      <a class="dropdown-item" href="javascript:void(0)" data-cid="<?php echo $postCom->comment_id;?>">
+                                        <i class="fa fa-bug"></i> Report comment
+                                      </a>
+                                    <?php endif; ?>
+                                  </div>
                                   <p>
                                     <?php echo getPostLink(nl2br($postCom->comment)); ?>
                                   </p>
@@ -313,8 +333,9 @@
                               </div>
                             <?php endif; ?>
                            </div>
-                          <?php endforeach; ?>
+
                         </div>
+                        <?php endforeach; ?>
                      </div>
                   </div>
               </div>
@@ -326,10 +347,8 @@
     </div>
     <script type="text/javascript">
 
-            function savedMy(id) {
-
+            function savedMy(id){
               $.ajax({
-
                   url: "<?php echo URLROOT; ?>/posts/savePost/"+id,
                   type: 'post',
                   success: function (response)
@@ -488,6 +507,15 @@
               });
             }
           });
+        }
+
+        function showComments(){
+          var x = document.getElementById("show_hide_comments");
+            if (x.style.display === "none") {
+              x.style.display = "block";
+            } else {
+              x.style.display = "none";
+            }
         }
 
     </script>

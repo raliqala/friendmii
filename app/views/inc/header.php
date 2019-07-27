@@ -22,6 +22,7 @@
   <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
   <link href="<?php echo URLROOT; ?>/emoji/css/emoji.css" rel="stylesheet">
 <?php
+ date_default_timezone_set('UTC');
 //logged in track, inactivity track
   if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
     $online_status = 1;
@@ -37,6 +38,7 @@
            data: {'st':st}
        });
    }
+
  </script>
   <title><?php echo SITENAME; ?></title>
 </head>

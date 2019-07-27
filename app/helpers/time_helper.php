@@ -1,11 +1,6 @@
 <?php
 
-//<link rel="stylesheet" href="<?php echo URLROOT; phptag/css/style.css">
- //date_default_timezone_set('Africa/Johannesburg');
- //echo friendmii_time_ago('2019-04-21 04:56:19.000');
- //date_default_timezone_get();
- date_default_timezone_set('America/New_York');
-
+date_default_timezone_set('UTC');
 
 function get_time_ago($time)
 {
@@ -35,17 +30,20 @@ function get_time_ago($time)
 
 
 function likesOrLike($dataMod){
-  $like_count = $dataMod;
-  if ($like_count == 0) {
-    return '' . $like_count . ' ' . 'Likes';
-  }else if($like_count == 1){
-    return '' . $like_count . ' ' . 'Like';
-  }else {
-    return '' . $like_count . ' ' . 'Likes';
+    $like_count = $dataMod;
+    if ($like_count == 0) {
+      return '' . $like_count . ' ' . 'Likes';
+    }else if($like_count == 1){
+      return '' . $like_count . ' ' . 'Like';
+    }else {
+      return '' . $like_count . ' ' . 'Likes';
+    }
   }
-}
 
-
+  // function lastSeen($friendmii_unix){
+  //   $datetimeLast = "Last seen " . date("l", mktime(strtotime($friendmii_unix))) . " at " . date("H:i",strtotime($friendmii_unix));
+  //   return $datetimeLast;
+  // }
 
 
 

@@ -3,7 +3,7 @@
     public function __construct(){
 
     }
-    /*<?php echo URLROOT; ?>posts/delete/<?php echo $post->post_id;?>*/
+    
     // Load Homepage
     public function index(){
       // If logged in, redirect to posts

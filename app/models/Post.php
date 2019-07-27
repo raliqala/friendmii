@@ -37,10 +37,11 @@
 
     // Add Post
     public function addPost($data){
-      $date = date('Y-m-d H:i:s');
+      $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+	    $date = $datebytimezone->format('Y-m-d H:i:s');
       // Prepare Query
-      $this->db->query('INSERT INTO post (user_id, post, posted_at, like_count, closed, image)
-      VALUES (:user_id, :post, :posted_at, 0, 0, :image)');
+      $this->db->query('INSERT INTO post (user_id, post, posted_at, comment_count, like_count, closed, image)
+      VALUES (:user_id, :post, :posted_at, 0, 0, 0, :image)');
       // Bind Values
       $this->db->bind(':user_id', $data['user_id']);
       $this->db->bind(':post', $data['post_text']);
@@ -58,7 +59,6 @@
 
     // Update Post
     public function updatePost($data){
-      //die(print_r($data,true));
       // Prepare Query
       $this->db->query('UPDATE post SET post = :post, image = :image WHERE post_id = :post_id');
 
@@ -144,7 +144,8 @@
     }
 
     public function save_Post($data){
-      $date = date('Y-m-d H:i:s');
+      $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+	    $date = $datebytimezone->format('Y-m-d H:i:s');
       $this->db->query('INSERT INTO save_post (user_id, post_id, saved_on) VALUES (:user_id, :post_id, :saved_on )');
 
       $this->db->bind(':user_id', $data['user_id']);
@@ -159,7 +160,8 @@
     }
 
     public function report_Post($data){
-      $date = date('Y-m-d H:i:s');
+      $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+	    $date = $datebytimezone->format('Y-m-d H:i:s');
       $this->db->query('INSERT INTO report_post (user_id, post_id, report_comment, report_date) VALUES (:user_id, :post_id, :report_comment, :report_date)');
 
       $this->db->bind(':user_id', $data['user_id']);
@@ -175,14 +177,23 @@
     }
 
     public function commentPost($data){
-      $date = date('Y-m-d H:i:s');
-      $this->db->query('INSERT INTO comment (post_id, user_id, comment, commented_at, closed) VALUES (:post_id, :user_id, :comment, :commented_at, 0)');
+      $this->db->query('SELECT * FROM post WHERE post_id = :post_id');
+      $this->db->bind(':post_id', $data['post_id']);
+      $row = $this->db->single();
+      $n = $row->comment_count;
+
+      $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+	    $date = $datebytimezone->format('Y-m-d H:i:s');
+      $this->db->query('INSERT INTO comment (post_id, user_id, comment, reply_count, like_count, commented_at, closed) VALUES (:post_id, :user_id, :comment, 0, 0, :commented_at, 0)');
       $this->db->bind(':post_id', $data['post_id']);
       $this->db->bind(':user_id', $data['user_id']);
       $this->db->bind(':comment', $data['comment_text']);
       $this->db->bind(':commented_at', $date);
 
       if ($this->db->execute()) {
+        $this->db->query("UPDATE post SET comment_count = $n+1 WHERE post_id = :post_id");
+        $this->db->bind(':post_id', $data['post_id']);
+        $this->db->execute();
         return true;
       }else {
         return false;
@@ -205,7 +216,8 @@
    public function likePost($data){
 
         if (isset($data['liked'])) {
-          $date = date('Y-m-d H:i:s');
+          $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+    	    $date = $datebytimezone->format('Y-m-d H:i:s');
 
           $this->db->query('SELECT * FROM post WHERE post_id = :post_id');
           $this->db->bind(':post_id', $data['post_id']);

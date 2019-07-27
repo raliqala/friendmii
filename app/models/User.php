@@ -13,7 +13,9 @@
       //die(print_r(random_username($data['firstname']),true));
       $username = random_username($data['firstname']);
       $validation_code = token_generator();
-      $date = date('Y-m-d H:i:s');
+      //$date = date('Y-m-d H:i:s');
+      $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+	    $date = $datebytimezone->format('Y-m-d H:i:s');
       //$validation_code = md5($data['name'] + microtime());
       $email = $data['email'];
       $firstname = $data['firstname'];
@@ -119,7 +121,8 @@
       }
     //log in
     public function login($email, $password, $remember = false){
-      $date = date('Y-m-d H:i:s');
+      $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+	    $date = $datebytimezone->format('Y-m-d H:i:s');
       $this->db->query('SELECT * FROM users WHERE email = :email');
       $this->db->bind('email', $email);
 
@@ -194,7 +197,8 @@
     }
 
     public function lastLogOut($uid){
-      $date = date('Y-m-d H:i:s');
+      $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+	    $date = $datebytimezone->format('Y-m-d H:i:s');
       $this->db->query('UPDATE users SET logout_time = :logout_time, online = 0 WHERE user_id = :user_id');
       $this->db->bind(':user_id', $uid);
       $this->db->bind(':logout_time', $date);

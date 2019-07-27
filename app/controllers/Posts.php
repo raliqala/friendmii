@@ -12,7 +12,6 @@
     // Load All Posts
     public function index(){
 
-      //$UserLikedCheck = $this->postModel->UserLikedOrNot();
       $comments = $this->postModel->getComments();
       $posts = $this->postModel->getPosts();
         $data = [
@@ -41,7 +40,7 @@
         if(!$_SESSION['user_id']){
           redirect('users/login');
         }
-        
+
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
             //Sanitize post array
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
