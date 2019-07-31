@@ -40,10 +40,15 @@ function likesOrLike($dataMod){
     }
   }
 
-  // function lastSeen($friendmii_unix){
-  //   $datetimeLast = "Last seen " . date("l", mktime(strtotime($friendmii_unix))) . " at " . date("H:i",strtotime($friendmii_unix));
-  //   return $datetimeLast;
-  // }
+  function joined($friendmii_unix){
+    $datetimeLast = date("Y-m-d",strtotime($friendmii_unix));
+    return $datetimeLast;
+  }
+
+  function lastSeen($friendmii_unix){
+    $datetimeLast = date("Y-m-d",strtotime($friendmii_unix));
+    return $datetimeLast;
+  }
 
 
 

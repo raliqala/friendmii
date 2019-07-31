@@ -5,6 +5,10 @@
       z-index: 1051 !important;
   }
 
+  .left-controller-option .hide{
+    display: none;
+  }
+
   .profile-image .inner-image .status_online{
     height: 20px;
     width: 20px;
@@ -141,7 +145,7 @@
         </div>
       </div>
       <div class="perso-data">
-        <h2 class="h5"><?php echo $pro->firstname; ?> <span></span> <?php echo $pro->lastname; ?> <span class="text-success h6">Joined: <?php echo get_time_ago($pro->acount_created_at); ?></span></h2>
+        <h2 class="h5"><?php echo $pro->firstname; ?> <span></span> <?php echo $pro->lastname; ?> <span class="text-success h6">Joined: <?php echo joined($pro->acount_created_at); ?></span></h2>
           <span><strong class="h5">Gender:</strong> <?php echo $pro->gender; ?></span>
           <span><strong class="h5 ml-2">Born:</strong> <?php echo $pro->dob; ?></span>
       </div>
@@ -319,7 +323,7 @@
 
                           <hr>
                           <?php if (!empty($pro->bio)): ?>
-                            <p><?php echo nl2br($pro->bio); ?></p>
+                            <p><?php echo getPostLink(nl2br($pro->bio)); ?></p>
                           <?php else: ?>
                             <h3>Your bio</h3>
                           <?php endif; ?>
@@ -684,7 +688,25 @@
       </div>
 
         <?php if ($_SESSION['user_id'] != $pro->user_id): ?>
-
+          <div class="pull-right left-controller-option">
+            <div class="card-size-resize">
+              <!--col-md-3 col-xl-3-->
+               <div class="card">
+                   <div class="card-header">
+                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#friends" role="tab">
+                       Add as friend
+                     </a>
+                     <?php if (following_or_not($_SESSION['user_id'], $pro->user_id)): ?>
+                       <span class="unfollow" onclick="return">Unfollow</span>
+                       <span class="follow hide" onclick="return">Follow</span>
+                     <?php else: ?>
+                       <span class="follow" onclick="return">Follow</span>
+                       <span class="unfollow hide" onclick="return">Unfollow</span>
+                     <?php endif; ?>
+                   </div>
+                </div>
+              </div>
+            </div>
         <?php else: ?>
           <div class="pull-right left-controller-option">
             <div class="card-size-resize">

@@ -241,29 +241,28 @@
 
     // // Delete Post
     public function delete($id){
-      //die(print_r($id,true));
-      $postFile = $this->postModel->getPostById($id);
-      //die(print_r($postFile->image,true));
-      if($_SERVER['REQUEST_METHOD'] == 'GET'){
+
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+        $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
         //Execute
+        $postFile = $this->postModel->getPostById($id);
+        // $data = [
+        //   'post_id' => trim($_POST['post_id'])
+        // ];
+        //die(print_r($data,true));
         if (file_exists($postFile->image)) {
           unlink($postFile->image);
           if($this->postModel->deletePost($id)){
-            flash('post_message', 'Post Removed');
-            redirect('posts');
+              echo json_encode(1);
             } else {
-              flashErr('error-post', '<span>Sorry, something went wrong</span>');
-              redirect('posts');
-              exit();
+              echo json_encode(0);
             }
         }else {
           if($this->postModel->deletePost($id)){
-            flash('post_message', 'Post Removed');
-            redirect('posts');
+              echo json_encode(1);
             } else {
-              flashErr('error-post', '<span>Sorry, something went wrong</span>');
-              redirect('posts');
-              exit();
+              echo json_encode(0);
             }
         }
       } else {

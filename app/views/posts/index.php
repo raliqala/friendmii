@@ -142,7 +142,7 @@
                             <a class="dropdown-item" href="<?php echo URLROOT; ?>/posts/edit/<?php echo $post->post_id;?>" data-toggle="modal" data-target="#editModal<?php echo $post->post_id;?>">
                               <i class="fa fa-pencil"></i> Edit post
                             </a>
-                            <a class="dropdown-item" href="<?php echo URLROOT; ?>/posts/delete/<?php echo $post->post_id;?>" data-toggle="modal" data-target="#deleteModal<?php echo $post->post_id;?>">
+                            <a class="dropdown-item" href="javascript:void()" onclick="return deletePost('<?php echo $post->post_id;?>')">
                               <i class="fa fa-trash" aria-hidden='true'></i> Delete post
                             </a>
                             <div class="dropdown-divider"></div>
@@ -219,7 +219,7 @@
                         <!-- End edit post -->
                         <!-- visibility spell -->
                         <!--Delete Post-->
-                            <div class="modal fade" id="deleteModal<?php echo $post->post_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <!-- <div class="modal fade" id="deleteModal<?php echo $post->post_id;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                               <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                   <div class="modal-header">
@@ -239,7 +239,7 @@
                                   </form>
                                 </div>
                               </div>
-                            </div>
+                            </div> -->
                         <!-- End Delete -->
                         <!-- Basic dropdown -->
                         <span class="pull-right">
@@ -276,11 +276,11 @@
                            <span class="likes_count" style="color: #575757;"><?php echo likesOrLike($post->like_count); ?></span>
                          </li>
                          <li class="comments_only">
-                           <span  class="comment-btn" onclick="showComments()"><i class="fas fa-comment-alt"></i> <span style="color: #575757;">Comments 0</span></span>
+                           <span  class="comment-btn"><i class="fas fa-comment-alt"></i> <span style="color: #575757;">Comments 0</span></span>
                          </li>
                        </ul>
-                       <?php foreach ($data['comments'] as $postCom): ?>
-                        <div id="show_hide_comments" style="display: none;">
+
+                        <div>
                           <div class="comment_post">
                             <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $_SESSION['username']; ?>" class="user_comment_pic">
                               <?php if (!empty($_SESSION['profile_pic'])): ?>
@@ -295,6 +295,7 @@
                             </a>
                           </div>
 
+                          <?php foreach ($data['comments'] as $postCom): ?>
                            <div class="disply_comments">
                             <?php if ($post->post_id == $postCom->post_id): ?>
                               <div class="comment_view_holder">
@@ -333,9 +334,9 @@
                               </div>
                             <?php endif; ?>
                            </div>
-
+                           <?php endforeach; ?>
                         </div>
-                        <?php endforeach; ?>
+
                      </div>
                   </div>
               </div>
@@ -509,14 +510,31 @@
           });
         }
 
-        function showComments(){
-          var x = document.getElementById("show_hide_comments");
-            if (x.style.display === "none") {
-              x.style.display = "block";
-            } else {
-              x.style.display = "none";
-            }
-        }
+    function deletePost(post_id){
+	       if (confirm('Are you sure you want to delete this post?')) {
+              $.ajax({
+               url: '<?php echo URLROOT; ?>/posts/delete/'+post_id,
+               type: "POST",
+                 success: function (response) {
+                   alert('Post was deleted');
+                   setTimeout(function(){
+                     location.reload();
+               });
+            },
+            error: function(){
+        			alert("Sorry something went wrong please try again..");
+        		}
+         });
+	    }
+		}
+        // function showComments(){
+        //   var x = document.getElementById("show_hide_comments");
+        //     if (x.style.display === "none") {
+        //       x.style.display = "block";
+        //     } else {
+        //       x.style.display = "none";
+        //     }
+        // }
 
     </script>
 
