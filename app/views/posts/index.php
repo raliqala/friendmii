@@ -16,7 +16,72 @@
         </div>
       </div>
     </div>
-    <div class="row pull-right mr-auto">
+
+
+    <div class="modal fade" id="modalPostForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold" style="font-style: italic; color: #2AD1A3 !important;"><?php echo $_SESSION['name']?></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-3">
+            <section>
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-12 col-md-8 col-lg-8 col-xl-10">
+                    <form class="" form="postForm" action="<?php echo URLROOT; ?>/posts/post/" onsubmit="return TpValidate()" enctype="multipart/form-data" method="post">
+                    <div class="row align-items-center">
+                      <div class="post-post">
+                        <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $_SESSION['username']; ?>">
+                          <?php if (!empty($_SESSION['profile_pic'])): ?>
+                            <img src="<?php echo URLROOT;?>/<?php echo $_SESSION['profile_pic']; ?>" width="40" height="40" alt="profile pic">
+                          <?php else: ?>
+                            <img src="./public/assets/blank-profile.png" width="40" height="40" alt="profile pic">
+                          <?php endif; ?>
+                        </a>
+                      </div>
+                      <div class="col mt-4">
+                        <textarea name="post_text" dir="auto" id="area" style="resize: none; " class="form-control form-control-lg" maxlength="500" data-emojiable="true" data-emoji-input="unicode" placeholder="Say something here.."></textarea>
+                        <img src="" height="" width="" onClick="triggerClick()" id="filepreview" style="position: relative; top: .5em; left: 1em; width: auto; height: auto; max-height: 140px; max-width: 140px; border-radius: 5px;">
+                      </div>
+                      <div class="col mt-4">
+                        <select class="browser-default" name="privacy" required>
+                          <option value="0" selected>Public</option>
+                          <option value="1">Friends</option>
+                          <option value="2">Best Friends</option>
+                        </select>
+                      </div>
+                       <div class="file-field" style="position: absolute; top: 4.8em; left: 34.5em;">
+                        <div class="d-flex justify-content-left">
+                          <div class="">
+                            <span class="blue-text"><i class="fa fa-picture-o fa-lg"></i></span>
+                            <input type="file" onChange="previewImage(this)" id="file" name="image" accept=".jpg, .png, .gif, .jpeg" onkeyup="imageVal()">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="row justify-content-start mt-4">
+                        <div class="col">
+                          <button class="btn btn-primary btn-block mt-1 mb-4">Post</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      </div> -->
+
+
+
+    <!-- <div class="row pull-right mr-auto">
       <div class="card" style="width: 17rem; position: absolute; right: 4em;">
         <img class="card-img-top" src="./public/assets/default-fav.jpg" alt="Card image cap">
         <div class="card-body">
@@ -39,73 +104,36 @@
                   </a>
                 </div>
                 <div class="col mt-4">
-                  <input type="text" class="form-control-custom" name="" data-toggle="modal" data-target="#modalPostForm" data-emojiable="true" data-emoji-input="unicode" placeholder="Have something in mind...">
+                  <input type="text" class="form-control-custom" name="" data-toggle="modal" data-target="#exampleModal" placeholder="Have something in mind...">
                 </div>
                 <div class="post-camera">
-                  <a href="" data-toggle="modal" data-target="#modalPostForm"><i class="fa fa-camera"></i></a>
+                  <a href="" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-camera"></i></a>
                 </div>
               </div>
 
-              <div class="modal fade" id="modalPostForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                aria-hidden="true">
+              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                   <div class="modal-content">
-                    <div class="modal-header text-center">
-                      <h4 class="modal-title w-100 font-weight-bold" style="font-style: italic; color: #2AD1A3 !important;"><?php echo $_SESSION['name']?></h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body mx-3">
-                      <section>
-                        <div class="container">
-                          <div class="row justify-content-center">
-                            <div class="col-12 col-md-8 col-lg-8 col-xl-10">
-                              <form class="" form="postForm" action="<?php echo URLROOT; ?>/posts/post/" onsubmit="return TpValidate()" enctype="multipart/form-data" method="post">
-                              <div class="row align-items-center">
-                                <div class="post-post">
-                                  <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $_SESSION['username']; ?>">
-                                    <?php if (!empty($_SESSION['profile_pic'])): ?>
-                                      <img src="<?php echo URLROOT;?>/<?php echo $_SESSION['profile_pic']; ?>" width="40" height="40" alt="profile pic">
-                                    <?php else: ?>
-                                      <img src="./public/assets/blank-profile.png" width="40" height="40" alt="profile pic">
-                                    <?php endif; ?>
-                                  </a>
-                                </div>
-                                <div class="col mt-4">
-                                  <textarea name="post_text" dir="auto" id="area" style="resize: none; " class="form-control form-control-lg" maxlength="500" data-emojiable="true" data-emoji-input="unicode" placeholder="Say something here.."></textarea>
-                                  <img src="" height="" width="" onClick="triggerClick()" id="filepreview" style="position: relative; top: .5em; left: 1em; width: auto; height: auto; max-height: 140px; max-width: 140px; border-radius: 5px;">
-                                </div>
-                                <!-- <div class="col mt-4">
-                                  <select class="browser-default" name="privacy" required>
-                                    <option value="0" selected>Public</option>
-                                    <option value="1">Friends</option>
-                                    <option value="2">Best Friends</option>
-                                  </select>
-                                </div> -->
-                                <div class="file-field" style="position: absolute; top: 4.8em; left: 34.5em;">
-                                  <div class="d-flex justify-content-left">
-                                    <div class="">
-                                      <span class="blue-text"><i class="fa fa-picture-o fa-lg"></i></span>
-                                      <input type="file" onChange="previewImage(this)" id="file" name="image" accept=".jpg, .png, .gif, .jpeg" onkeyup="imageVal()">
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                                <div class="row justify-content-start mt-4">
-                                  <div class="col">
-                                    <button class="btn btn-primary btn-block mt-1 mb-4">Post</button>
-                                  </div>
-                                </div>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                        <form class="" action="index.html" method="post">
+                          <textarea style="margin-top: -2em;" name="name" id="" placeholder="Write something here..."></textarea>
+                        </form>
+                        <hr>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-                </div>
+
               </div>
             </div>
           </div>

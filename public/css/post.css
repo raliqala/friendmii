@@ -1,18 +1,79 @@
 .outer-positioning {
   position: relative;
-  right: 3em !important;
-  padding-right: 3em !important;
+  padding-right: 13px !important;
 }
 
+.modal-lg {
+    max-width: 44%;
+}
+
+.post-only .btn{
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.post-only .btn-primary {
+    color: #fff;
+    background-color: #007bff;
+}
+
+.post-only button, input, optgroup, select, textarea {
+    margin: 0;
+    margin-left: 0px;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+.post-only [type="reset"], [type="submit"], button, html [type="button"] {
+    -webkit-appearance: button;
+}
+
+.post-only .btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+
+.post-only button, input {
+    overflow: visible;
+}
+
+.post-only button, select {
+    text-transform: none;
+}
+
+.post-only .btn-primary:hover {
+    color: #fff;
+    background-color: none;
+}
+
+
 .outer-positioning .form-control-custom {
-  height: 3em;
+  height: 2.5em;
   font-size: 18px;
-  width: 32em !important;
+  width: 31.5em !important;
   color: #6e6e6e;
   border: 1px solid #b3b3b3;
-  border-radius: 20px;
+  border-radius: 6px;
   background-color: #fff;
-  padding-left: 3.5em;
+  padding-left: 2.5em;
+  font-style: oblique;
 }
 
 .post-only .modal textarea {
@@ -25,9 +86,11 @@
 
 .outer-positioning .post-profile {
   position: relative;
-  bottom: -.78em;
-  right: -3.8em;
+  bottom: -.76em;
+  right: -3em;
   z-index: 1000;
+  border: 5px solid #fff;
+  border-radius: 6px;
 }
 
 .post-only .modal .post-post {
@@ -51,7 +114,7 @@
 
 .outer-positioning .post-profile a img {
   background-size: 40px 40px;
-  border-radius: 100px;
+  border-radius: 6px;
   -o-object-fit: cover;
      object-fit: cover;
 }
@@ -70,7 +133,7 @@
   -ms-flex: 0 0 58.333333%;
   flex: 0 0 58.333333%;
   max-width: 56.333333%;
-  margin-right: 8em !important;
+  /* margin-right: 8em !important; */
 }
 
 .image-user a img {

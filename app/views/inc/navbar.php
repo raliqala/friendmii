@@ -124,11 +124,11 @@
 
      <!-- Links -->
 
-
-       <form class="form-inline my-2 my-lg-0 ml-4" action="<?php echo URLROOT; ?>/posts/search" method="">
-         <input class="form-control" name="search"  id="country" type="search" placeholder="Search" aria-label="Search" autocomplete="off">
-         <button class="mr-4" style="background: transparent; border: none; margin-left: -2em;" type="submit"> <i class="fa fa-search"></i> </button>
+       <form class="form-inline my-2 my-lg-0 ml-4">
+         <input class="form-control" style="line-height: 1.4;" name="search" type="search" placeholder="Search" aria-label="Search" autocomplete="off">
+         <button class="mr-4" style="background: transparent; border: none; margin-left: -2em; color: #828688;"><i class="fa fa-search"></i></button>
        </form>
+     </ul>
    </div>
    <!-- Collapsible content -->
    <ul class="navbar-nav ml-auto nav-flex-icons">
