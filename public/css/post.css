@@ -7,63 +7,6 @@
     max-width: 44%;
 }
 
-.post-only .btn{
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 1px solid transparent;
-      border-top-color: transparent;
-      border-right-color: transparent;
-      border-bottom-color: transparent;
-      border-left-color: transparent;
-  padding: .375rem .75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: .25rem;
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-
-.post-only .btn-primary {
-    color: #fff;
-    background-color: #007bff;
-}
-
-.post-only button, input, optgroup, select, textarea {
-    margin: 0;
-    margin-left: 0px;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-}
-
-.post-only [type="reset"], [type="submit"], button, html [type="button"] {
-    -webkit-appearance: button;
-}
-
-.post-only .btn:not(:disabled):not(.disabled) {
-    cursor: pointer;
-}
-
-.post-only button, input {
-    overflow: visible;
-}
-
-.post-only button, select {
-    text-transform: none;
-}
-
-.post-only .btn-primary:hover {
-    color: #fff;
-    background-color: none;
-}
-
-
 .outer-positioning .form-control-custom {
   height: 2.5em;
   font-size: 18px;
@@ -77,8 +20,31 @@
 }
 
 .post-only .modal textarea {
-  padding-left: 3.5em;
+  padding-left: 3em;
+  margin-top: -.5em !important;
+  width: 100%;
+  margin-bottom: -.6em !important;
+  border: none;
+  resize: none;
+  padding-top: 5px !important;
+  font-size: large;
+  overflow: hidden;
+  box-sizing: padding-box;
 }
+
+/* .post-only .modal .file-field input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 4.5%;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+} */
 
 .outer-positioning input:hover {
   cursor: pointer;
@@ -95,8 +61,7 @@
 
 .post-only .modal .post-post {
   position: absolute;
-  top: 1.8em;
-  right: 34.6em;
+  top: 8px;
   z-index: 1000;
 }
 
@@ -108,7 +73,7 @@
 }
 
 .outer-positioning .post-camera a {
-  color: #cecece;
+  color: #007bff80;
   font-size: 1.5em;
 }
 
@@ -119,11 +84,33 @@
      object-fit: cover;
 }
 
-.outer-positioning .post-post a img {
+.post-only .post-post a img {
   background-size: 40px 40px;
-  border-radius: 100px;
+  border-radius: 6px;
   -o-object-fit: cover;
      object-fit: cover;
+}
+
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+        border-top-color: transparent;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 /*post view design*/

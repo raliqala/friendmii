@@ -8,6 +8,13 @@
   define("PASS", "84226Tp45");
   define("MENU_ICON", "./public/assets/");
 
+  /*
+  define("DB_HOST", "Sict-sql");
+  define("DB_USER", "fmcs10");
+  define("DB_PASS", "Password2019");
+  define("DB_NAME", "friendmii");
+  */
+
   // App Root
   define('APPROOT', dirname(dirname(__FILE__)));
   // URL Root

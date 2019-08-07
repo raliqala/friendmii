@@ -104,32 +104,51 @@
                   </a>
                 </div>
                 <div class="col mt-4">
-                  <input type="text" class="form-control-custom" name="" data-toggle="modal" data-target="#exampleModal" placeholder="Have something in mind...">
+                  <input type="text" class="form-control-custom" name="" data-toggle="modal" data-target="#postModal" placeholder="Have something in mind...">
                 </div>
                 <div class="post-camera">
-                  <a href="" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-camera"></i></a>
+                  <a href="" data-toggle="modal" data-target="#postModal"><i class="fa fa-picture-o"></i></a>
                 </div>
               </div>
 
-              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                   <div class="modal-content">
                       <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                          <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-pencil-square-o"></i> Create a new post</h5>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
                       </div>
                       <div class="modal-body">
-                        <form class="" action="index.html" method="post">
-                          <textarea style="margin-top: -2em;" name="name" id="" placeholder="Write something here..."></textarea>
-                        </form>
-                        <hr>
+                        <div class="post-post">
+                          <a href="<?php echo URLROOT; ?>/profile?u=<?php echo $_SESSION['username']; ?>">
+                            <?php if (!empty($_SESSION['profile_pic'])): ?>
+                              <img src="<?php echo URLROOT;?>/<?php echo $_SESSION['profile_pic']; ?>" width="40" height="40" alt="profile pic">
+                            <?php else: ?>
+                              <img src="./public/assets/blank-profile.png" width="40" height="40" alt="profile pic">
+                            <?php endif; ?>
+                          </a>
+                        </div>
+                        <form form="postForm" id="postForm" action="<?php echo URLROOT; ?>/posts/post/" enctype="multipart/form-data" method="post">
+                          <textarea name="name" id="area" placeholder="Write something here..."></textarea>
+                          <span aria-hidden="true" title="Remove image.." id="removeimageid" onclick="removeimage()" style="position: absolute; cursor: pointer; display: none;; left: 4em; bottom: 9px; z-index: 1;color: orange;" class="fa fa-times-circle"></span>
+                          <img src="" height="" width="" title="Choose different image.." onClick="triggerClick()" id="filepreview" style="position: relative; top: .5em; left: 3em; width: auto; height: auto; max-height: 140px; max-width: 140px; border-radius: 5px; cursor: pointer;">
+                          <div class="file-field" style="position: absolute; bottom: .1em; left: 34.5em;">
+                           <div class="d-flex">
+                             <div class="after-d-flex">
+                               <span class="blue-text"><i style="font-size: 2em;" class="fa fa-picture-o"></i></span>
+                               <input type="file" onChange="previewImage(this)" id="file" name="image" accept=".jpg, .png, .gif, .jpeg" onkeyup="imageVal()">
+                             </div>
+                           </div>
+                         </div>
+                         </form>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button> -->
+                        <button type="button" class="btn btn-primary" onclick="return submitPostForm()">Post</button>
                       </div>
+
                     </div>
                   </div>
                 </div>
@@ -376,6 +395,10 @@
     </div>
     <script type="text/javascript">
 
+          $("#submitForm").on('click', function() {
+            $("#myform").submit();
+          });
+
             function savedMy(id){
               $.ajax({
                   url: "<?php echo URLROOT; ?>/posts/savePost/"+id,
@@ -394,10 +417,18 @@
               });
             }
 
+            function removeimage() {
+              document.querySelector('#filepreview').setAttribute('src', '');
+              var fileInput = document.getElementById('file');
+              fileInput.value = '';
+              document.querySelector('#area').setAttribute('placeholder','Write something here...');
+              document.querySelector('#removeimageid').style.display = 'none';
+            }
 
-        function triggerClick(e) {
-              document.querySelector('#file').click();
-          }
+
+            function triggerClick(e) {
+                  document.querySelector('#file').click();
+              }
 
           function previewImage(e) {
             if (e.files[0]) {
@@ -406,45 +437,47 @@
               document.querySelector('#filepreview').setAttribute('height', 100);
               document.querySelector('#filepreview').setAttribute('width', 100);
               document.querySelector('#filepreview').setAttribute('src', e.target.result);
+              document.querySelector('#removeimageid').style.display = 'block';
+              document.querySelector('#area').setAttribute('placeholder','Write something about this image...');
             }
             reader.readAsDataURL(e.files[0]);
           }
         }
 
-          function TpValidate(){
-            var fileInput = document.getElementById('file');
-            var post = document.getElementById('area');
-            var postData = post.value;
-            var image = fileInput.value;
-
-            if (postData == "" && image == "")
-            {
-                alert("Please write something...");
-                fileInput.value = '';
-                return false;
-                post.value = '';
-                return false;
-            }
-
-            var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-            if (image != "") {
-              if(!allowedExtensions.exec(image)){
-                  alert('Please upload file having extensions .jpeg .jpg .png .gif only.');
-                  fileInput.value = '';
-                  return false;
-              }
-            }
-
-            var fileSize = document.getElementById('file').files[0].size;
-            if(fileSize > 2097152){
-               alert("Maximum file size exceeded, file size must be less than or equals 2mb");
-               fileInput.value = '';
-               return false;
-            };
-
-            return true;
-
-        }
+        //   function TpValidate(){
+        //     var fileInput = document.getElementById('file');
+        //     var post = document.getElementById('area');
+        //     var postData = post.value;
+        //     var image = fileInput.value;
+        //
+        //     if (postData == "" && image == "")
+        //     {
+        //         alert("Please write something...");
+        //         fileInput.value = '';
+        //         return false;
+        //         post.value = '';
+        //         return false;
+        //     }
+        //
+        //     var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+        //     if (image != "") {
+        //       if(!allowedExtensions.exec(image)){
+        //           alert('Please upload file having extensions .jpeg .jpg .png .gif only.');
+        //           fileInput.value = '';
+        //           return false;
+        //       }
+        //     }
+        //
+        //     var fileSize = document.getElementById('file').files[0].size;
+        //     if(fileSize > 2097152){
+        //        alert("Maximum file size exceeded, file size must be less than or equals 2mb");
+        //        fileInput.value = '';
+        //        return false;
+        //     };
+        //
+        //     return true;
+        //
+        // }
 
         function TpValidateupdate(){
           // var post = document.getElementById('area');
@@ -538,23 +571,24 @@
           });
         }
 
-    function deletePost(post_id){
-	       if (confirm('Are you sure you want to delete this post?')) {
-              $.ajax({
-               url: '<?php echo URLROOT; ?>/posts/delete/'+post_id,
-               type: "POST",
-                 success: function (response) {
-                   alert('Post was deleted');
-                   setTimeout(function(){
-                     location.reload();
-               });
-            },
-            error: function(){
-        			alert("Sorry something went wrong please try again..");
-        		}
-         });
-	    }
-		}
+        function deletePost(post_id){
+    	       if (confirm('Are you sure you want to delete this post?')) {
+                  $.ajax({
+                   url: '<?php echo URLROOT; ?>/posts/delete/'+post_id,
+                   type: "POST",
+                     success: function (response) {
+                       alert('Post was deleted');
+                       setTimeout(function(){
+                         location.reload();
+                   });
+                },
+                error: function(){
+            			alert("Sorry something went wrong please try again..");
+            		}
+             });
+    	    }
+    		}
+
         // function showComments(){
         //   var x = document.getElementById("show_hide_comments");
         //     if (x.style.display === "none") {
@@ -563,6 +597,57 @@
         //       x.style.display = "none";
         //     }
         // }
+
+
+        var textarea = document.querySelector('textarea');
+        textarea.addEventListener('keydown', autosize);
+        function autosize(){
+          var el = this;
+          setTimeout(function(){
+            el.style.cssText = 'height:auto; padding:0';
+            // for box-sizing other than "content-box" use:
+            // el.style.cssText = '-moz-box-sizing:content-box';
+            el.style.cssText = 'height:' + el.scrollHeight + 'px';
+          },0);
+        }
+
+          function submitPostForm(){
+
+            var fileInput = document.getElementById('file');
+            var post = document.getElementById('area');
+            var postData = post.value;
+            var image = fileInput.value;
+
+              if ($('#area').val() != '' || $('#file').val() != '') {
+                var fileSize = document.getElementById('file').files[0].size;
+                alert(fileSize);
+              }else {
+                if (postData == "" && image == ""){
+                    alert("Please write something...");
+                    fileInput.value = '';
+                    return false;
+                    post.value = '';
+                    return false;
+                }
+
+              var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+              if (image != "") {
+                  if(!allowedExtensions.exec(image)){
+                      alert('Please upload file having extensions .jpeg .jpg .png .gif only.');
+                      fileInput.value = '';
+                      return false;
+                  }
+                }
+
+                var fileSize = document.getElementById('file').files[0].size;
+                if (fileSize > 2097152) {
+                  alert("Maximum file size exceeded, file size must be less than or equals 2mb");
+                  fileInput.value = '';
+                  return false;
+                }
+              }
+
+        }
 
     </script>
 

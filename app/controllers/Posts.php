@@ -144,8 +144,6 @@
 
 
         }else{
-            //get existing post from model
-
             $this->view('posts', $data);
           }
 
