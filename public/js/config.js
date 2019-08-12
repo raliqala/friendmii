@@ -3539,4 +3539,3 @@ function buildMap()
         Config.rx_codes = new RegExp('(' + codes.join('|') + ')', "g");
     }
 }
-

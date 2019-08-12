@@ -40,13 +40,13 @@
       $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
 	    $date = $datebytimezone->format('Y-m-d H:i:s');
       // Prepare Query
-      $this->db->query('INSERT INTO post (user_id, post, posted_at, comment_count, like_count, closed, image)
-      VALUES (:user_id, :post, :posted_at, 0, 0, 0, :image)');
+      $this->db->query('INSERT INTO post (user_id, post, posted_at, comment_count, like_count, privacy, closed, image)
+      VALUES (:user_id, :post, :posted_at, 0, 0, :privacy, 0, :image)');
       // Bind Values
       $this->db->bind(':user_id', $data['user_id']);
       $this->db->bind(':post', $data['post_text']);
       $this->db->bind(':posted_at', $date);
-      //$this->db->bind(':privacy', $data['privacy']);
+      $this->db->bind(':privacy', $data['privacy']);
       $this->db->bind(':image', $data['image']);
 
       //Execute
@@ -182,7 +182,7 @@
       $row = $this->db->single();
       $n = $row->comment_count;
 
-      $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+      $datebytimezone = new DateTime("now", new DateTimeZone('UTC'));
 	    $date = $datebytimezone->format('Y-m-d H:i:s');
       $this->db->query('INSERT INTO comment (post_id, user_id, comment, reply_count, like_count, commented_at, closed) VALUES (:post_id, :user_id, :comment, 0, 0, :commented_at, 0)');
       $this->db->bind(':post_id', $data['post_id']);
@@ -194,6 +194,21 @@
         $this->db->query("UPDATE post SET comment_count = $n+1 WHERE post_id = :post_id");
         $this->db->bind(':post_id', $data['post_id']);
         $this->db->execute();
+        return true;
+      }else {
+        return false;
+      }
+    }
+
+    public function commentUpdate($data){
+      // $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+	    // $date = $datebytimezone->format('Y-m-d H:i:s');
+
+      $this->db->query('UPDATE comment SET comment = :comment WHERE comment_id = :comment_id');
+      $this->db->bind(':comment_id', $data['comment_id']);
+      $this->db->bind(':comment', $data['comment_text']);
+
+      if ($this->db->execute()) {
         return true;
       }else {
         return false;
@@ -252,6 +267,26 @@
         $this->db->query("UPDATE post SET like_count = $n-1 WHERE post_id = :post_id");
         $this->db->bind(':post_id', $data['post_id']);
         $this->db->execute();
+      }
+    }
+
+    // Delete Post image
+    public function Delete_Comment($data){
+      $this->db->query('SELECT * FROM post WHERE post_id = :post_id');
+      $this->db->bind(':post_id', $data['post_id']);
+      $row = $this->db->single();
+      $n = $row->comment_count;
+      // Prepare Query
+      $this->db->query('UPDATE comment SET closed = 1 WHERE comment_id = :comment_id');
+      $this->db->bind(':comment_id', $data['comment_id']);
+      //Execute
+      if($this->db->execute()){
+        $this->db->query("UPDATE post SET comment_count = $n-1 WHERE post_id = :post_id");
+        $this->db->bind(':post_id', $data['post_id']);
+        $this->db->execute();
+        return true;
+      } else {
+        return false;
       }
     }
 

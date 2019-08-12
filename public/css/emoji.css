@@ -39,29 +39,28 @@ span.emoji-inner {
 }
 
 img.emoji {
-    width: 1em;
-    height: 1em;
+  width: 1.2em;
+  height: 1.2em;
 }
 
-.emoji-wysiwyg-editor:empty:before {
+/* .emoji-wysiwyg-editor:empty:before {
     content: attr(placeholder);
-    color: #9aa2ab;
-}
+} */
 
-.emoji-picker-container {
+/* .emoji-picker-container {
     position: relative;
-}
+} */
 
 .emoji-picker-icon {
     cursor: pointer;
     position: absolute;
-    right: 10px;
-    top: 5px;
+    right: 10px !important;
+    top: 5px !important;
     font-size: 20px;
     opacity: 0.7;
     z-index: 100;
     transition: none;
-    color: black;
+    color: #2196f3 !important;
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
@@ -92,7 +91,7 @@ img.emoji {
     padding: 6px;
     padding-right: 35px;
     margin-bottom: 0px;
-    min-height: 35px; /* 35 */
+    min-height: 35px;
     height: 30px;
     max-height: 284px;
     overflow: auto;
@@ -105,6 +104,10 @@ img.emoji {
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     -webkit-user-select: text;
     word-wrap: break-word;
+}
+
+.emoji-wysiwyg-editor:not(disabled):active:focus{
+  border: none;
 }
 
 .emoji-wysiwyg-editor.parent-has-scroll {
@@ -160,13 +163,13 @@ img.emoji {
     display: inline-block;
     width: 24px;
     height: 29px;
-    background: url('../img/IconsetSmiles.png') no-repeat;
+    background: url('../public/css/img/IconsetSmiles.png') no-repeat;
     background-size: 42px 350px;
     border: 0;
 }
 
 .is_1x .emoji-menu-tabs .emoji-menu-tab {
-    background-image: url('../img/IconsetSmiles_1x.png');
+    background-image: url('../public/css/img/IconsetSmiles_1x.png');
 }
 
 .emoji-menu-tabs .icon-recent { background-position: -9px -306px; }

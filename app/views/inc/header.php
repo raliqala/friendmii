@@ -20,7 +20,9 @@
   <script type="text/javascript" src="<?php echo URLROOT; ?>/js/popper.min.js"></script> -->
   <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css"/>
   <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
-  <link href="<?php echo URLROOT; ?>/emoji/css/emoji.css" rel="stylesheet">
+  <script src="https://twemoji.maxcdn.com/1/twemoji.min.js"></script>
+	<script src="https://twemoji.maxcdn.com/twemoji.min.js"></script>
+  <link href="<?php echo URLROOT; ?>/css/emoji.css" rel="stylesheet">
 <?php
  date_default_timezone_set('UTC');
 //logged in track, inactivity track
@@ -38,7 +40,6 @@
            data: {'st':st}
        });
    }
-
  </script>
   <title><?php echo SITENAME; ?></title>
 </head>

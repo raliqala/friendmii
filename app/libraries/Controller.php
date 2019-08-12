@@ -20,7 +20,7 @@
         require_once '../app/views/'.$url.'.php';
       } else {
         // No view exists
-        die('View does not exist');
+        die('<div class="align-middle" style="margin: auto 5em; margin-top: 2em; font-size: 4em; color:red;">Sorry this view does not exist</div>');
       }
     }
   }

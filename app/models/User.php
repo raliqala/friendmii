@@ -22,7 +22,7 @@
       //$nameFirstChar = $firstname[0];
       //$target_path = createAvatarImage($nameFirstChar);
 
-      $this->db->query('INSERT INTO users(firstname, lastname, username, email, dob, gender, address, validation_code, password, is_activated, acount_created_at, deleted) VALUES (:firstname, :lastname, :username, :email, :dob, :gender, :address, :validation_code, :password, 0, :acount_created_at, 0)');
+      $this->db->query('INSERT INTO users(firstname, lastname, username, email, dob, gender, address, validation_code, password, is_activated, acount_created_at, deleted, online) VALUES (:firstname, :lastname, :username, :email, :dob, :gender, :address, :validation_code, :password, 0, :acount_created_at, 0, 0)');
       $this->db->bind(':firstname', $data['firstname']);
       $this->db->bind(':lastname', $data['lastname']);
       $this->db->bind(':username', $username);

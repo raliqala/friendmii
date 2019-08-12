@@ -42,6 +42,7 @@
         }
 
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $privacy = (isset($_POST['privacy'])) ? $_POST['privacy'] : '';
             //Sanitize post array
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
@@ -54,7 +55,8 @@
             $data = [
                 'post_text' => trim($_POST['post_text']),
                 'user_id' => trim($_SESSION['user_id']),
-                'image' => trim($path)
+                'image' => trim($path),
+                'privacy' => trim($privacy),
             ];
             //die(print_r(isset($data['post_text']), true));
             //die(print_r("nooo", true));
@@ -375,6 +377,29 @@
 
     }
 
+
+    public function UpdateComment(){
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+        $data = [
+          'comment_id' => trim($_POST['cid']),
+          'comment_text' => trim($_POST['comment_text']),
+        ];
+
+        if ($this->postModel->commentUpdate($data)) {
+          echo json_encode(1);
+        }else {
+          echo json_encode(0);
+        }
+
+
+      }else {
+        redirect('posts');
+      }
+
+    }
+
     public function AddLike(){
       if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -415,6 +440,31 @@
 
 
       }else {
+        redirect('posts');
+      }
+    }
+
+    //delete comment
+    public function deleteComment($id){
+
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+        $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+        //$postFile = $this->postModel->getPostById($id);
+        $data = [
+          'post_id' => trim($_POST['postid']),
+          'comment_id' => trim($id),
+        ];
+        //if (file_exists($postFile->image)) {
+          //unlink($postFile->image);
+          if($this->postModel->Delete_Comment($data)){
+              echo json_encode(1);
+            } else {
+              echo json_encode(0);
+            }
+          //}
+      } else {
         redirect('posts');
       }
     }
