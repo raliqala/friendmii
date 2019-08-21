@@ -98,11 +98,23 @@
           </div>
         </section>
 
-        <div class="mt-3">
+        <div id="comments-ts" style="z-index:100000;" class="mt-3">
         </div>
 
+        <?php
+        // $test = getfriends($_SESSION['user_id']);
+        // foreach ($test as $row) {
+        //   foreach ($row as $value) {
+        //     echo '<div class="user_box">
+        //              <span>'.$value->username.'</span>
+        //          </div>';
+        //   }
+        // } ?>
+
+
         <?php foreach($data['posts'] as $post) :?>
-          <section class="display_posts_only">
+         <?php if (isMyFriend($post->username)): ?>
+          <section class="display_posts_only" id="<?php echo $post->post_id; ?>">
             <div class="container">
               <div class="row justify-content-center">
                 <div class="col-12 col-xl-7">
@@ -266,10 +278,10 @@
 						                   <span class="unlike hide fa fa-heart" onclick="return removeLikes('<?php echo $post->post_id; ?>')"></span>
                              <?php endif; ?>
 
-                           <span class="likes_count" style="color: #575757;"><?php echo likesOrLike($post->like_count); ?></span>
+                           <span class="likes_count" style="color: #575757;"><?php echo likesOrLike(format_num($post->like_count)); ?></span>
                          </li>
                          <li class="comments_only">
-                           <span  class="comment-btn" onclick="showComments('<?php echo $post->post_id; ?>')"><i class="fas fa-comment-alt"></i> <span style="color: #575757;">Comments <?php echo $post->comment_count; ?></span></span>
+                           <span  class="comment-btn" onclick="showComments('<?php echo $post->post_id; ?>')"><i class="fas fa-comment-alt"></i> <span style="color: #575757;">Comments <?php echo format_num($post->comment_count); ?></span></span>
                          </li>
                        </ul>
 
@@ -324,10 +336,10 @@
                                     <?php echo getPostLink(nl2br($postCom->comment)); ?>
                                   </p>
                                     <?php if ($_SESSION['user_id'] == $postCom->user_id): ?>
-                                      <div id="editComment_<?php echo $postCom->comment_id; ?>" style="display:none;">
-                                          <textarea id="commEditBox_<?php echo $postCom->comment_id; ?>" rows="2"><?php echo $postCom->comment; ?></textarea>
-                                          <button type="submit" onclick="UpdateComment('<?php echo $postCom->comment_id; ?>')">Save</button>
-                                          <button type="button" name="button" onclick="editComment_cancel('<?php echo $postCom->comment_id; ?>')">Cancel</button>
+                                      <div id="editComment_<?php echo $postCom->comment_id; ?>" style="display:none; margin-left: 3.3em; margin-top: -.6em;">
+                                          <textarea id="commEditBox_<?php echo $postCom->comment_id; ?>" class="form-control" rows="2" style="width: 435px; resize: none; border-radius: 4px;"><?php echo $postCom->comment; ?></textarea>
+                                          <button type="submit" style="width: 20%; border: none;border-radius: 3px;background-color: #007bff;color: white;cursor: pointer;" onclick="UpdateComment('<?php echo $postCom->comment_id; ?>')">Save</button>
+                                          <button type="button" style="width: 20%; border: none; border-radius: 3px; background-color: #b0b1b3; color: white; cursor: pointer; margin-top: 5px;" onclick="editComment_cancel('<?php echo $postCom->comment_id; ?>')">Cancel</button>
                                       </div>
                                     <?php endif; ?>
                                 </div>
@@ -343,6 +355,7 @@
             </div>
           </div>
         </section>
+        <?php endif; ?>
         <?php endforeach; ?>
 
     </div>
@@ -373,6 +386,8 @@
                         if (comment == true) {
                           setTimeout(function(){
                             location.reload();
+                            // var x = document.getElementById("show_hide_comments_"+pid);
+                            // x.style.display = 'block';
                           });
                         }else {
                           alert('Sorry something went wrong, Please try again');
@@ -630,6 +645,43 @@
             el.style.cssText = 'height:' + el.scrollHeight + 'px';
           },0);
         }
+
+        // $(document).ready(function(){
+        //   windowOnScroll();
+        // });
+        //
+        // function windowOnScroll() {
+        //        $(window).on("scroll", function(e){
+        //         if ($(window).scrollTop() == $(document).height() - $(window).height()){
+        //             if($(".display_posts_only").length < $("#total_count").val()) {
+        //                 var lastId = $(".display_posts_only:last").attr("id");
+        //                 getMoreData(lastId);
+        //             }
+        //         }
+        //     });
+        // }
+
+        // function getMoreData(lastId) {
+        //        $(window).off("scroll");
+        //     $.ajax({
+        //         url: 'postsForReload(lastId)',
+        //         type: "get",
+        //         beforeSend: function ()
+        //         {
+        //             $('.ajax-loader').show();
+        //         },
+        //         success: function (data) {
+        //         	   setTimeout(function() {
+        //                 $('.ajax-loader').hide();
+        //           for (var i = 0; i < data.length; i++) {
+        //             console.log(data[i]);
+        //           }
+        //             windowOnScroll();
+        //         	   }, 1000);
+        //         }
+        //    });
+        // }
+
 
 
     </script>

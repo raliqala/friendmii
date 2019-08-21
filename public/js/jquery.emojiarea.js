@@ -359,6 +359,7 @@
      * ! MODIFICATION START Following code was modified by Igor Zhukov, in
      * order to improve rich text paste
      */
+
     var changeEvents = 'blur change';
     if (!this.options.norealTime) {
       changeEvents += ' keyup';

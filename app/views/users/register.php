@@ -77,6 +77,12 @@
             <input type="password" name="confirm_password" class="form-control" value="" placeholder="Confirm password" >
             </div>
           </div>
+          <input type="hidden" name="street_number" id="street_number" value="">
+          <input type="hidden" name="route" id="route" value="">
+          <input type="hidden" name="locality" id="locality" value="">
+          <input type="hidden" name="area_level" id="administrative_area_level_1" value="">
+          <input type="hidden" name="postal_code" id="postal_code" value="">
+          <input type="hidden" name="country" id="country" value="">
           <div class="invalid-feedback">
                 <?php echo $data['confirm_password_err'] ?>
              </div>
@@ -90,7 +96,7 @@
                   I have read and Accept <a href="https://www.froala.com">Terms and Conditions</a>
                 </label>
               </div>
-              <button type="submit" id="btnSubmit" class="btn btn-primary btn-block mt-4" disabled data-disable-with="Signing up...">SIGNUP</button>
+              <button type="submit" id="btnSubmit" class="btn btn-primary btn-block mt-1" disabled data-disable-with="Signing up...">SIGNUP</button>
             </div>
           </div>
           <p class="text-center mt-2">Already have an Account? <a href="<?php echo URLROOT; ?>/users/login">SIGN IN</a></p>

@@ -13,14 +13,27 @@
     public function index(){
 
       $comments = $this->postModel->getComments();
+      //json_encode($comments);
       $posts = $this->postModel->getPosts();
+      $postCount = $this->postModel->getPostsNum();
         $data = [
+          'count_post' => $postCount,
           'comments' => $comments,
           'posts' => $posts,
       ];
 
       $this->view('posts/index', $data);
     }
+
+    // public function showComments(){
+    //   $comments = $this->postModel->getComments();
+    //       $data = [
+    //         'comments' => $comments,
+    //     ];
+    //
+    //   $this->view('posts/index', $data);
+    //   echo json_encode($data);
+    // }
 
     // Show Single Post
     public function show($id){

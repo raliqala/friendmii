@@ -24,6 +24,12 @@
       return $results;
     }
 
+    public function getPostsNum(){
+      $this->db->query('SELECT COUNT("post_id") AS post_count FROM post');
+      $postsNumber = $this->db->resultset();
+      return $postsNumber;
+    }
+
     // Get Post By ID
     public function getPostById($id){
       $this->db->query("SELECT * FROM post WHERE post_id = :id");

@@ -297,14 +297,92 @@ class Profile extends Controller{
        }
 
     }else{
-        //get existing post from model
-
         $this->view('profile', $data);
       }
 
+    }//end update bio..
+
+    public function sendFriendRequest(){
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $data = [
+          'my_id' => trim($_SESSION['user_id']),
+          'user_id' => trim($_POST['user_id']),
+        ];
+
+        if ($this->userModel->is_request_already_sent($data)) {
+          redirect('profile?u='.$_SESSION['username']);
+        }elseif (is_already_friends($data['my_id'],$data['user_id'])) {
+          redirect('profile?u='.$_SESSION['username']);
+        }else {
+          if ($this->userModel->make_pending_friends($data)) {
+            echo json_encode(1);
+          }else {
+            echo json_encode(0);
+          }
+        }
+
+      }else {
+        redirect('profile?u='.$_SESSION['username']);
+      }
     }
 
-  //end update bio..
+    public function cancelFriendRequest(){
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $data = [
+          'my_id' => trim($_SESSION['user_id']),
+          'user_id' => trim($_POST['some_id']),
+        ];
+
+          if ($this->userModel->cancel_or_ignore_friend_request($data)) {
+            echo json_encode(1);
+          }else {
+            echo json_encode(0);
+          }
+
+      }else {
+        redirect('profile?u='.$_SESSION['username']);
+      }
+    }
+
+    public function acceptFriendRequest(){
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $data = [
+          'my_id' => trim($_SESSION['user_id']),
+          'user_id' => trim($_POST['some_id']),
+        ];
+
+          if ($this->userModel->make_friends($data)) {
+            echo json_encode(1);
+          }else {
+            echo json_encode(0);
+          }
+
+      }else {
+        redirect('profile?u='.$_SESSION['username']);
+      }
+    }
+
+    public function unfriend($some_id){
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $data = [
+          'my_id' => trim($_SESSION['user_id']),
+          'user_id' => trim($some_id),
+        ];
+
+          if ($this->userModel->delete_friends($data)) {
+            echo json_encode(1);
+          }else {
+            echo json_encode(0);
+          }
+
+      }else {
+        redirect('profile?u='.$_SESSION['username']);
+      }
+    }
 
 
-}
+}//end profile class

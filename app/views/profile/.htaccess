@@ -1,3 +1,6 @@
+<IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([a-zA-Z0-9_-]+)/?$ profile?u=$1 [QSA]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^u/([a-zA-Z0-9_-]+)$ profile?u=$2 [NC,L]
+</IfModule>

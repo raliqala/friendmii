@@ -39,6 +39,7 @@
       <div class="col-md-12">
         <h3 class="h5"><?php flash('profile_updated'); ?></h3>
         <h3 class="h5"><?php flash('error-profile'); ?></h3>
+
         <div class="jumbotron jumbotron-fluid jumbo-style" style="height: 13em;background-image:url('<?php if(isset($pro->cover_image)) {echo $pro->cover_image;} ?>'); background-size: cover; background-repeat: no-repeat; background-position: center; background-attachment: static;">
           <div class="container">
               <?php if ($_SESSION['user_id'] != $pro->user_id): ?>
@@ -145,7 +146,7 @@
         </div>
       </div>
       <div class="perso-data">
-        <h2 class="h5"><?php echo $pro->firstname; ?> <span></span> <?php echo $pro->lastname; ?> <span class="text-success h6">Joined: <?php echo joined($pro->acount_created_at); ?></span></h2>
+        <h2 class="h5"><?php echo add3dots($pro->firstname, "...", 12); ?> <span></span> <?php echo add3dots($pro->lastname, "...", 7); ?> <span class="text-success h6">Joined: <?php echo joined($pro->acount_created_at); ?></span></h2>
           <span><strong class="h5">Gender:</strong> <?php echo $pro->gender; ?></span>
           <span><strong class="h5 ml-2">Born:</strong> <?php echo $pro->dob; ?></span>
       </div>
@@ -692,17 +693,43 @@
             <div class="card-size-resize">
               <!--col-md-3 col-xl-3-->
                <div class="card">
-                   <div class="card-header">
-                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#friends" role="tab">
-                       Add as friend
-                     </a>
-                     <?php if (following_or_not($_SESSION['user_id'], $pro->user_id)): ?>
-                       <span class="unfollow" onclick="return">Unfollow</span>
-                       <span class="follow hide" onclick="return">Follow</span>
-                     <?php else: ?>
-                       <span class="follow" onclick="return">Follow</span>
-                       <span class="unfollow hide" onclick="return">Unfollow</span>
-                     <?php endif; ?>
+                   <div class="">
+                       <div class="col text-center mb-3">
+                         <?php
+                            if (is_already_friends($_SESSION['user_id'], $pro->user_id)) {
+                              echo '<a class="btn btn-primary white-text change_text" style="width:100%;" onclick="unfriend('.$pro->user_id.')">
+                                Friends
+                              </a>';
+                            }elseif (i_am_sender($_SESSION['user_id'], $pro->user_id)) {
+                              echo '<a class="btn btn-danger white-text" style="width:100%;" onclick="cancelfriendRequest('.$pro->user_id.')">
+                                Cancel friend request
+                              </a>';
+                              echo '<a class="btn btn-light white-text disabled" style="width:100%;">
+                                Friend request sent
+                              </a>';
+                            }elseif (i_am_receiver($_SESSION['user_id'], $pro->user_id)) {
+                              echo '<a class="btn btn-primary white-text" style="width:100%;" onclick="addfriend('.$pro->user_id.')">
+                                Accept
+                              </a>';
+                              echo '<a class="btn btn-danger white-text" style="width:100%;" onclick="cancelfriendRequest('.$pro->user_id.')">
+                                Ignore
+                              </a>';
+                            }else {
+                              echo '<a class="btn btn-primary white-text" style="width:100%;" onclick="sendfriendRequest('.$pro->user_id.')">
+                                Send friend request
+                              </a>';
+                            }
+                          ?>
+                       </div>
+                     <div class="col text-center">
+                       <?php if (following_or_not($_SESSION['user_id'], $pro->user_id)): ?>
+                         <span class="unfollow" onclick="return">Unfollow</span>
+                         <span class="follow hide btn btn-primary" style="width:100%;" onclick="return">Follow</span>
+                       <?php else: ?>
+                         <span class="follow btn btn-primary" style="width:100%;" onclick="return">Follow</span>
+                         <span class="unfollow hide" onclick="return">Unfollow</span>
+                       <?php endif; ?>
+                     </div>
                    </div>
                 </div>
               </div>
@@ -752,7 +779,7 @@
     <?php endforeach; ?>
   </div>
 
-<div class="" style="margin-bottom: 5em;">
+<div class="" style="margin-bottom: 1em;">
 
 </div>
 <script>
@@ -817,6 +844,90 @@ var placeSearch, autocomplete;
      });
     }
   }
+
+  function sendfriendRequest(user_id){
+    $.ajax({
+        type:'POST',
+        url:'<?php echo URLROOT; ?>/profile/sendFriendRequest/',
+        data:{"user_id":user_id},
+        cache: false,
+        success: function(request){
+          if (request == true) {
+            setTimeout(function(){
+              location.reload();
+            });
+          }else {
+            alert('Sorry something went wrong, Please try again');
+            return false;
+          }
+        }
+    });
+  }
+
+  function cancelfriendRequest(user_id){
+    $.ajax({
+        type:'POST',
+        url:'<?php echo URLROOT; ?>/profile/cancelFriendRequest/',
+        data:{"some_id":user_id},
+        cache: false,
+        success: function(unrequest){
+          if (unrequest == true) {
+            setTimeout(function(){
+              location.reload();
+            });
+          }else {
+            alert('Sorry something went wrong, Please try again');
+            return false;
+          }
+        }
+    });
+  }
+
+  function addfriend(user_id){
+    $.ajax({
+        type:'POST',
+        url:'<?php echo URLROOT; ?>/profile/acceptFriendRequest/',
+        data:{"some_id":user_id},
+        cache: false,
+        success: function(addfriend){
+          if (addfriend == true) {
+            setTimeout(function(){
+              location.reload();
+            });
+          }else {
+            alert('Sorry something went wrong, Please try again');
+            return false;
+          }
+        }
+    });
+  }
+
+  function unfriend(user_id){
+    if(confirm('Are you sure you want to unfriend this current user?')){
+      $.ajax({
+          url:'<?php echo URLROOT; ?>/profile/unfriend/'+user_id,
+          type:'POST',
+          success: function(unrequest){
+            setTimeout(function(){
+              location.reload();
+            });
+          },
+          error: function(){
+            alert("Sorry something went wrong please try again..");
+          }
+      });
+    }
+  }
+
+  $(document).ready(function(){
+
+    $('.change_text').hover(function(){
+        $(this).text("Unfriend");
+    },
+    function(){
+        $(this).text("Friends");
+    });
+ });
 
  </script>
  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRMLF9pK8EoY-wOnp1_N1uZ7pH6fOnlLQ&libraries=places&callback=initAutocomplete"

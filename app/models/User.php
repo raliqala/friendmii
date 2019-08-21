@@ -340,8 +340,7 @@
     }
 
     //this function is currently not inuse..
-  public function getTokendByEmail($email)
-  {
+  public function getTokendByEmail($email){
     $this->db->query('SELECT * FROM auth WHERE email = :email');
     $this->db->bind(':email', $email);
     $row = $this->db->single();
@@ -515,6 +514,96 @@
       }else{
         return false;
       }
+   }
+
+   // CHECK IF REQUEST HAS ALREADY BEEN SENT
+   public function is_request_already_sent($data){
+     $this->db->query('SELECT * FROM friend_request WHERE (sender = :my_id AND receiver = :frnd_id) OR (sender = :frnd_id2 AND receiver = :my_id2)');
+     $this->db->bind(':my_id', $data['my_id']);
+     $this->db->bind(':frnd_id', $data['user_id']);
+     $this->db->bind(':my_id2', $data['my_id']);
+     $this->db->bind(':frnd_id2', $data['user_id']);
+
+     $row = $this->db->resultset();
+     if($this->db->rowCount($row) > 0){
+       return true;
+     }else {
+       return false;
+     }
+   }
+   //END CHECK IF REQUEST HAS ALREADY BEEN SENT
+
+   // MAKE PENDING FRIENDS (SEND FRIEND REQUEST)
+   public function make_pending_friends($data){
+     $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+     $date = $datebytimezone->format('Y-m-d H:i:s');
+
+     $this->db->query('INSERT INTO friend_request (sender, receiver, request_on) VALUES(:my_id, :frnd_id, :request_on)');
+     $this->db->bind(':my_id', $data['my_id']);
+     $this->db->bind(':frnd_id', $data['user_id']);
+     $this->db->bind(':request_on', $date);
+
+     if($this->db->execute()){
+       return true;
+     }else {
+       return false;
+     }
+   }
+
+   // CANCLE FRIEND REQUEST
+   public function cancel_or_ignore_friend_request($data){
+     $this->db->query('DELETE FROM friend_request WHERE (sender = :my_id AND receiver = :frnd_id) OR (sender = :frnd_id2 AND receiver = :my_id2)');
+     $this->db->bind(':my_id', $data['my_id']);
+     $this->db->bind(':frnd_id', $data['user_id']);
+     $this->db->bind(':my_id2', $data['my_id']);
+     $this->db->bind(':frnd_id2', $data['user_id']);
+
+     if($this->db->execute()){
+       return true;
+     }else {
+       return false;
+     }
+   }
+   //END CANCLE FRIEND REQUEST
+
+   // MAKE FRIENDS
+   public function make_friends($data){
+     $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
+     $date = $datebytimezone->format('Y-m-d H:i:s');
+
+     $this->db->query('DELETE FROM friend_request WHERE (sender = :my_id AND receiver = :frnd_id) OR (sender = :frnd_id2 AND receiver = :my_id2)');
+     $this->db->bind(':my_id', $data['my_id']);
+     $this->db->bind(':frnd_id', $data['user_id']);
+     $this->db->bind(':my_id2', $data['my_id']);
+     $this->db->bind(':frnd_id2', $data['user_id']);
+
+     if($this->db->execute()){
+         $this->db->query('INSERT INTO friends (user_one, user_two, friends_since) VALUES (:user_one, :user_two, :friends_since)');
+         $this->db->bind(':user_one', $data['my_id']);
+         $this->db->bind(':user_two', $data['user_id']);
+         $this->db->bind(':friends_since', $date);
+         $this->db->execute();
+       return true;
+     }else {
+       return false;
+     }
+   }
+
+   // DELETE FRIENDS
+   public function delete_friends($data){
+
+     $this->db->query('DELETE FROM friends WHERE (user_one = :my_id AND user_two = :frnd_id) OR (user_one = :frnd_id2 AND user_two = :my_id2)');
+     $this->db->bind(':my_id', $data['my_id']);
+     $this->db->bind(':frnd_id', $data['user_id']);
+     $this->db->bind(':my_id2', $data['my_id']);
+     $this->db->bind(':frnd_id2', $data['user_id']);
+
+     if ($this->db->execute()) {
+       return true;
+     } else {
+       return false;
+     }
+
    }
 
 
