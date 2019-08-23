@@ -19,10 +19,11 @@
       //$validation_code = md5($data['name'] + microtime());
       $email = $data['email'];
       $firstname = $data['firstname'];
+      $comma = ',';
       //$nameFirstChar = $firstname[0];
       //$target_path = createAvatarImage($nameFirstChar);
 
-      $this->db->query('INSERT INTO users(firstname, lastname, username, email, dob, gender, address, validation_code, password, is_activated, acount_created_at, deleted, online) VALUES (:firstname, :lastname, :username, :email, :dob, :gender, :address, :validation_code, :password, 0, :acount_created_at, 0, 0)');
+      $this->db->query("INSERT INTO users(firstname, lastname, username, email, dob, gender, address, validation_code, password, is_activated, acount_created_at, deleted, online, friendArray) VALUES (:firstname, :lastname, :username, :email, :dob, :gender, :address, :validation_code, :password, 0, :acount_created_at, 0, 0, '".$comma."')");
       $this->db->bind(':firstname', $data['firstname']);
       $this->db->bind(':lastname', $data['lastname']);
       $this->db->bind(':username', $username);
@@ -571,6 +572,16 @@
      $datebytimezone = new DateTime("now", new DateTimeZone('UTC') );
      $date = $datebytimezone->format('Y-m-d H:i:s');
 
+     $this->db->query('SELECT username FROM users WHERE user_id = :user_id');
+     $this->db->bind(':user_id', $data['my_id']);
+     $my_row = $this->db->single();
+     @$my_username = $my_row->username;
+
+     $this->db->query('SELECT username FROM users WHERE user_id = :user_id');
+     $this->db->bind(':user_id', $data['user_id']);
+     $user_row = $this->db->single();
+     @$user_username = $user_row->username;
+
      $this->db->query('DELETE FROM friend_request WHERE (sender = :my_id AND receiver = :frnd_id) OR (sender = :frnd_id2 AND receiver = :my_id2)');
      $this->db->bind(':my_id', $data['my_id']);
      $this->db->bind(':frnd_id', $data['user_id']);
@@ -583,6 +594,15 @@
          $this->db->bind(':user_two', $data['user_id']);
          $this->db->bind(':friends_since', $date);
          $this->db->execute();
+
+         $this->db->query("UPDATE users SET friendArray = CONCAT(friendArray,'$user_username,') WHERE user_id = :user_id");
+         $this->db->bind(':user_id', $data['my_id']);
+         $this->db->execute();
+
+         $this->db->query("UPDATE users SET friendArray = CONCAT(friendArray,'$my_username,') WHERE user_id = :user_id");
+         $this->db->bind(':user_id', $data['user_id']);
+         $this->db->execute();
+
        return true;
      }else {
        return false;

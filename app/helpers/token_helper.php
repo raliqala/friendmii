@@ -143,19 +143,15 @@ function isMyFriend($userToCheck){
   $db->query('SELECT * FROM users WHERE user_id = :user_id');
   $db->bind(':user_id', $user_id);
   $row = $db->single();
-  @$userna = $row->username;
+  @$userna = "," . $row->username . ",";
+  @$friendArray = $row->friendArray;
+  $usernameComma = "," . $userToCheck . ",";
 
-  foreach (getfriends() as $key) {
-    foreach ($key as $value) {
-      //$friendArray = ;
-      if ((strstr($value->username,$userToCheck) || $userToCheck == $userna)) {
-        return true;
-      }else {
-        return false;
-      }
-    }
+  if ((strstr($friendArray,$usernameComma) || $usernameComma == $userna)) {
+    return true;
+  }else {
+    return false;
   }
-
 
 }
 
