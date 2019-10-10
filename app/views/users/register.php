@@ -182,6 +182,6 @@ if (document.getElementById("chkAgree").checked == true)
 }
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRMLF9pK8EoY-wOnp1_N1uZ7pH6fOnlLQ&libraries=places&callback=initAutocomplete"
+    <script src="https://maps.googleapis.com/maps/api/js?key=****&libraries=places&callback=initAutocomplete"
         async defer></script>
 <?php require APPROOT . '/views/inc/footer.php'; ?>
